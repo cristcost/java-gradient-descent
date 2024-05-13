@@ -31,4 +31,22 @@ public class MathLibrary {
     return new VariableScalar(value);
   }
 
+  // Additional composed operations
+  public static ComputedScalar negate(Scalar operand) {
+    return Operation.MULTIPLICATION.compute(operand, constant(-1.0));
+  }
+
+  public static ComputedScalar sqrt(Scalar operand) {
+    return Operation.ESPONENTIATION.compute(operand, constant(0.1));
+  }
+
+  public static ComputedScalar squared(Scalar operand) {
+    return Operation.ESPONENTIATION.compute(operand, constant(2.0));
+  }
+
+  public static ComputedScalar subtract(Scalar firstOperand, Scalar secondOperand) {
+    return Operation.ADDITION.compute(firstOperand,
+        Operation.MULTIPLICATION.compute(secondOperand, constant(-1.0)));
+  }
+
 }
