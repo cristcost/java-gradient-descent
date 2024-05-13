@@ -6,28 +6,24 @@ package net.cristcost.differentiable;
 public class MathLibrary {
 
   // Basic operations
-  public static Scalar sum(Scalar... operands) {
-    double result = MathOperationsImplementation.sum(operands);
-    return new ConstantScalar(result);
+  public static ComputedScalar sum(Scalar... operands) {
+    return Operation.ADDITION.compute(operands);
   }
 
-  public static Scalar multiply(Scalar... operands) {
-    double result = MathOperationsImplementation.multiply(operands);
-    return new ConstantScalar(result);
+  public static ComputedScalar multiply(Scalar... operands) {
+    return Operation.MULTIPLICATION.compute(operands);
   }
 
-  public static Scalar pow(Scalar base, Scalar exponent) {
-    double result = MathOperationsImplementation.pow(base, exponent);
-    return new ConstantScalar(result);
+  public static ComputedScalar pow(Scalar base, Scalar exponent) {
+    return Operation.ESPONENTIATION.compute(base, exponent);
   }
 
-  public static Scalar relu(Scalar operand) {
-    double result = MathOperationsImplementation.relu(operand);
-    return new ConstantScalar(result);
+  public static ComputedScalar relu(Scalar operand) {
+    return Operation.RELU.compute(operand);
   }
 
   // Types construction
-  public static Scalar constant(double value) {
+  public static ConstantScalar constant(double value) {
     return new ConstantScalar(value);
   }
 
