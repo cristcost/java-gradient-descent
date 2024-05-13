@@ -18,6 +18,7 @@ public class ComputedScalar implements Scalar, Chainable {
 
   @Override
   public void backpropagate(double outerGradient) {
+    fromComputation.getOperation().backpropagate(outerGradient, fromComputation.getOperands());
   }
 
 }
