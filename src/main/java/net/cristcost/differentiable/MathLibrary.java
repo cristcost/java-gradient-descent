@@ -1,6 +1,5 @@
 package net.cristcost.differentiable;
 
-
 /**
  * A Math Library performing differentiable operation.
  */
@@ -8,24 +7,28 @@ public class MathLibrary {
 
   // Basic operations
   public static Scalar sum(Scalar... operands) {
-    throw new UnsupportedOperationException("Method is not yet implemented");
+    double result = MathOperationsImplementation.sum(operands);
+    return new ConstantScalar(result);
   }
 
   public static Scalar multiply(Scalar... operands) {
-    throw new UnsupportedOperationException("Method is not yet implemented");
+    double result = MathOperationsImplementation.multiply(operands);
+    return new ConstantScalar(result);
   }
 
   public static Scalar pow(Scalar base, Scalar exponent) {
-    throw new UnsupportedOperationException("Method is not yet implemented");
+    double result = MathOperationsImplementation.pow(base, exponent);
+    return new ConstantScalar(result);
   }
 
   public static Scalar relu(Scalar operand) {
-    throw new UnsupportedOperationException("Method is not yet implemented");
+    double result = MathOperationsImplementation.relu(operand);
+    return new ConstantScalar(result);
   }
 
   // Types construction
   public static Scalar constant(double value) {
-    throw new UnsupportedOperationException("Method is not yet implemented");
+    return new ConstantScalar(value);
   }
 
 }
