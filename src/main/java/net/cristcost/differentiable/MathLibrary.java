@@ -27,4 +27,8 @@ public class MathLibrary {
     return new ConstantScalar(value);
   }
 
+  public static VariableScalar variable(double value) {
+    return new VariableScalar(value);
+  }
+
 }
