@@ -1,7 +1,6 @@
 package net.cristcost.differentiable;
 
 import java.util.Arrays;
-import java.util.Iterator;
 
 /**
  * A Math Library performing differentiable operation.
@@ -17,8 +16,8 @@ public class MathLibrary {
 
 
   private static Tensor broadCast(int[] shape, Tensor operand) {
-    if (!Arrays.equals(shape, operand.getShape())) {
-      return new BroadcastCostantTensor(operand, shape);
+    if (!Arrays.equals(shape, operand.getShape()) && operand instanceof Broadcastable) {
+      return ((Broadcastable) operand).broadcast(shape);
     } else {
       return operand;
     }

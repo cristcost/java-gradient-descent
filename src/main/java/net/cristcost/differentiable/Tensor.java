@@ -17,7 +17,7 @@ public interface Tensor {
 
   default double get(int... indices) {
     int index = calculateIndex(indices);
-    return getData()[index];
+    return getData()[index % getData().length];
   }
 
   default String json() {
