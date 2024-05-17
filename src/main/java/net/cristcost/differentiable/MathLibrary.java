@@ -57,15 +57,19 @@ public class MathLibrary {
     return new ConstantTensor(value, shape(value.length));
   }
 
-  public static Tensor matrix(double[] value, int rows, int columns) {
-    if (value.length != rows * columns) {
-      throw new IllegalArgumentException("Data length does not match shape.");
-    }
-    return new ConstantTensor(value, shape(rows, columns));
+  public static BuildWithData matrix(int rows, int columns) {
+    return data -> new ConstantTensor(data, shape(rows, columns));
   }
 
-  public static Tensor constant(double[] value, int[] shape) {
-    return new ConstantTensor(value, shape);
+  public static BuildWithShape constant(double... data) {
+    return shape -> new ConstantTensor(data, shape);
+  }
+
+  public interface BuildWithShape {
+    public Tensor shape(int... shape);
+  }
+  public interface BuildWithData {
+    public Tensor data(double... data);
   }
 
 }
