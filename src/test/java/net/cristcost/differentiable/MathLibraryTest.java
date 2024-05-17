@@ -69,6 +69,34 @@ class MathLibraryTest {
             matrix3by2.data(1.0, 0.0, -1.0, -2.0, 3.0, 6.0)));
   }
 
+
+  @Test
+  void testElementalBroadcasting() {
+    assertTensorsEquals(
+        vector(2.0, 4.0),
+        sum(scalar(2.0), vector(0.0, 2.0)));
+
+    assertTensorsEquals(
+        vector(2.0, 4.0),
+        sum(vector(0.0, 2.0), scalar(2.0)));
+
+    assertTensorsEquals(
+        vector(2.0, 4.0),
+        multiply(scalar(2.0), vector(1.0, 2.0)));
+
+    assertTensorsEquals(
+        vector(2.0, 4.0),
+        multiply(vector(1.0, 2.0), scalar(2.0)));
+
+    assertTensorsEquals(
+        vector(4.0, 8.0),
+        pow(scalar(2.0), vector(2.0, 3.0)));
+
+    assertTensorsEquals(
+        vector(4.0, 9.0),
+        pow(vector(2.0, 3.0), scalar(2.0)));
+  }
+
   @Test
   void testCombinedOperation() {
 
@@ -87,6 +115,11 @@ class MathLibraryTest {
     assertTensorsEquals(scalar(6.0), f.apply(scalar(4.0)));
     assertTensorsEquals(scalar(0.0), f.apply(scalar(6.0)));
     assertTensorsEquals(scalar(0.0), f.apply(scalar(8.0)));
+
+
+    assertTensorsEquals(
+        vector(0.0, 0.0, 6.0, 8.0, 6.0, 0.0, 0.0),
+        f.apply(vector(-4.0, -2.0, 0.0, 2.0, 4.0, 6.0, 8.0)));
 
   }
 

@@ -1,6 +1,7 @@
 package net.cristcost.differentiable;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  * A Math Library performing differentiable operation.
@@ -9,23 +10,56 @@ public class MathLibrary {
 
   // Basic operations
   public static Tensor sum(Tensor... operands) {
-    double[] result = MathOperationsImplementation.sum(operands);
-    return new ConstantTensor(result, operands[0].getShape().clone());
+    int[] shape = findResultShape(operands);
+    double[] result = MathOperationsImplementation.sum(broadCast(shape, operands));
+    return new ConstantTensor(result, shape);
   }
 
+
+  private static Tensor broadCast(int[] shape, Tensor operand) {
+    if (!Arrays.equals(shape, operand.getShape())) {
+      return new BroadcastCostantTensor(operand, shape);
+    } else {
+      return operand;
+    }
+  }
+
+  private static Tensor[] broadCast(int[] shape, Tensor... operands) {
+    Tensor[] broadcastOperands = new Tensor[operands.length];
+    for (int i = 0; i < operands.length; i++) {
+      broadcastOperands[i] = broadCast(shape, operands[i]);
+    }
+    return broadcastOperands;
+  }
+
+
   public static Tensor multiply(Tensor... operands) {
-    double[] result = MathOperationsImplementation.multiply(operands);
-    return new ConstantTensor(result, operands[0].getShape().clone());
+    int[] shape = findResultShape(operands);
+    double[] result = MathOperationsImplementation.multiply(broadCast(shape, operands));
+    return new ConstantTensor(result, shape);
   }
 
   public static Tensor pow(Tensor base, Tensor exponent) {
-    double[] result = MathOperationsImplementation.pow(base, exponent);
-    return new ConstantTensor(result, base.getShape().clone());
+    int[] shape = findResultShape(base, exponent);
+    double[] result =
+        MathOperationsImplementation.pow(broadCast(shape, base), broadCast(shape, exponent));
+    return new ConstantTensor(result, shape);
   }
 
   public static Tensor relu(Tensor operand) {
     double[] result = MathOperationsImplementation.relu(operand);
     return new ConstantTensor(result, operand.getShape().clone());
+  }
+
+
+  private static int[] findResultShape(Tensor... operands) {
+    int[] fullShape = shape();
+    for (Tensor t : operands) {
+      if (fullShape.length < t.getShape().length) {
+        fullShape = t.getShape();
+      }
+    }
+    return fullShape.clone();
   }
 
 
