@@ -1,5 +1,9 @@
 package net.cristcost.differentiable;
 
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 /**
  * Tensor interface.
  * 
@@ -31,6 +35,14 @@ public interface Tensor {
     return builder.toString();
   }
 
+  default <T> Optional<T> broadcastable(Function<Broadcastable, T> function) {
+    if (this instanceof Broadcastable) {
+      Broadcastable broadcastable = (Broadcastable) this;
+      return Optional.of(function.apply(broadcastable));
+    } else {
+      return Optional.empty();
+    }
+  }
 
   private int calculateIndex(int[] indices) {
     if (indices.length == 0) {
