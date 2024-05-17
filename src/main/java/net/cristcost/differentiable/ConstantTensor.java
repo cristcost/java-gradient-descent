@@ -4,9 +4,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class ConstantScalar implements Scalar {
+public class ConstantTensor implements Tensor {
 
   @Getter
-  private final double value;
+  private final NDimensionalArray value;
 
 }
