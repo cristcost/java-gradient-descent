@@ -21,6 +21,12 @@ public interface Tensor {
 
   default double get(int... indices) {
     int index = calculateIndex(indices);
+    if (index >= size()) {
+      throw new ArrayIndexOutOfBoundsException(
+          String.format(
+              "Requested index is beyond the size of the tensor data: result index %d >= size %d",
+              index, size()));
+    }
     return getData()[index % getData().length];
   }
 
@@ -45,20 +51,27 @@ public interface Tensor {
   }
 
   private int calculateIndex(int[] indices) {
-    if (indices.length == 0) {
+    int indicesNdim = indices.length;
+    if (indicesNdim == 0) {
       return 0;
-    } else if (indices.length == 1) {
+    } else if (indicesNdim == 1) {
       return indices[0];
-    } else if (indices.length > getShape().length) {
-      throw new IllegalArgumentException("Number of indices does not match array dimension.");
     } else {
-      int index = 0;
-      int multiplier = 1;
-      for (int i = getShape().length - 1; i >= (getShape().length - indices.length); i--) {
-        index += indices[i] * multiplier;
-        multiplier *= getShape()[i];
+
+      int tensorNdim = getShape().length;
+
+      if (indicesNdim > tensorNdim) {
+        throw new IllegalArgumentException("Number of indices does not match array dimension.");
+      } else {
+        int index = 0;
+        int multiplier = 1;
+        for (int i = tensorNdim - 1; i >= (tensorNdim - indicesNdim); i--) {
+          // shift the requested indices to the right by subtracting (tensorNdim - indicesNdim)
+          index += indices[i - tensorNdim + indicesNdim] * multiplier;
+          multiplier *= getShape()[i];
+        }
+        return index;
       }
-      return index;
     }
   }
 
