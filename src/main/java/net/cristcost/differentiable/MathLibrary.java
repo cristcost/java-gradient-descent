@@ -90,19 +90,12 @@ public class MathLibrary {
     return new ConstantTensor(value, shape(value.length));
   }
 
-  public static BuildWithData matrix(int rows, int columns) {
+  public static TensorBuilder matrix(int rows, int columns) {
     return data -> new ConstantTensor(data, shape(rows, columns));
   }
 
-  public static BuildWithShape constant(double... data) {
-    return shape -> new ConstantTensor(data, shape);
-  }
-
-  public interface BuildWithShape {
-    public Tensor shape(int... shape);
-  }
-  public interface BuildWithData {
-    public Tensor data(double... data);
+  public static TensorBuilder constant(int... shape) {
+    return data -> new ConstantTensor(data, shape);
   }
 
 }

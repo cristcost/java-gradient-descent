@@ -24,11 +24,11 @@ class TensorToStringTest {
     assertEquals(objectMapper.readTree("[3.0, 2.0, 1.0]"),
         objectMapper.readTree(tensor.json()));
 
-    tensor = matrix(2, 2).data(4, 3, 2, 1);
+    tensor = matrix(2, 2).withData(4, 3, 2, 1);
     assertEquals(objectMapper.readTree("[[4.0, 3.0], [2.0, 1.0]]"),
         objectMapper.readTree(tensor.json()));
 
-    tensor = constant(9, 8, 7, 6, 5, 4, 3, 2, 1).shape(3, 3);
+    tensor = constant(3, 3).withData(9, 8, 7, 6, 5, 4, 3, 2, 1);
     assertEquals(objectMapper.readTree("[[9.0, 8.0, 7.0], [6.0, 5.0, 4.0], [3.0, 2.0, 1.0]]"),
         objectMapper.readTree(tensor.json()));
 

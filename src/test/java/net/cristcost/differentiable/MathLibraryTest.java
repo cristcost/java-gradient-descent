@@ -19,10 +19,10 @@ class MathLibraryTest {
     var matrix2by2 = matrix(2, 2);
 
     assertTensorsEquals(
-        matrix2by2.data(2.1, 4.2, 6.3, 8.4),
+        matrix2by2.withData(2.1, 4.2, 6.3, 8.4),
         sum(
-            matrix2by2.data(2.0, 4.0, 6.0, 8.0),
-            matrix2by2.data(0.1, 0.2, 0.3, 0.4)));
+            matrix2by2.withData(2.0, 4.0, 6.0, 8.0),
+            matrix2by2.withData(0.1, 0.2, 0.3, 0.4)));
 
   }
 
@@ -35,10 +35,10 @@ class MathLibraryTest {
     var matrix2by2 = matrix(2, 2);
 
     assertTensorsEquals(
-        matrix2by2.data(0.2, 0.8, 1.8, 3.2),
+        matrix2by2.withData(0.2, 0.8, 1.8, 3.2),
         multiply(
-            matrix2by2.data(2.0, 4.0, 6.0, 8.0),
-            matrix2by2.data(0.1, 0.2, 0.3, 0.4)));
+            matrix2by2.withData(2.0, 4.0, 6.0, 8.0),
+            matrix2by2.withData(0.1, 0.2, 0.3, 0.4)));
   }
 
   @Test
@@ -50,10 +50,10 @@ class MathLibraryTest {
     var matrix2by2 = matrix(2, 2);
 
     assertTensorsEquals(
-        matrix2by2.data(0.5, 2.0, 36.0, 1.0),
+        matrix2by2.withData(0.5, 2.0, 36.0, 1.0),
         pow(
-            matrix2by2.data(2.0, 4.0, 6.0, 8.0),
-            matrix2by2.data(-1.0, 0.5, 2.0, 0.0)));
+            matrix2by2.withData(2.0, 4.0, 6.0, 8.0),
+            matrix2by2.withData(-1.0, 0.5, 2.0, 0.0)));
   }
 
   @Test
@@ -64,9 +64,9 @@ class MathLibraryTest {
     var matrix3by2 = matrix(3, 2);
 
     assertTensorsEquals(
-        matrix3by2.data(1.0, 0.0, 0.0, 0.0, 3.0, 6.0),
+        matrix3by2.withData(1.0, 0.0, 0.0, 0.0, 3.0, 6.0),
         relu(
-            matrix3by2.data(1.0, 0.0, -1.0, -2.0, 3.0, 6.0)));
+            matrix3by2.withData(1.0, 0.0, -1.0, -2.0, 3.0, 6.0)));
   }
 
 
