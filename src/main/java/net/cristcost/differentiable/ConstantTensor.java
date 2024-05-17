@@ -7,6 +7,14 @@ import lombok.RequiredArgsConstructor;
 public class ConstantTensor implements Tensor {
 
   @Getter
-  private final NDimensionalArray value;
+  private final double[] data;
+
+  @Getter
+  private final int[] shape;
+
+  @Override
+  public String toString() {
+    return this.json();
+  }
 
 }
