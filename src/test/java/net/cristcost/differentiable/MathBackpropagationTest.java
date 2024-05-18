@@ -75,46 +75,46 @@ class MathLibraryBackpropagationTest {
   @Test
   void testBasicPowerOperation() {
 
-    VariableTensor x1 = scalar().variable().withData(data(2.0));
-    ComputedTensor y1 = pow(x1, scalar().withData(data(8.0)));
+    VariableTensor x1 = scalar().variable().withData(2.0);
+    ComputedTensor y1 = pow(x1, scalar().withData(8.0));
     y1.startBackpropagation();
-    assertEquals(8.0 * Math.pow(2.0, 7.0), x1.getGradient());
+    assertArrayEquals(data(8.0 * Math.pow(2.0, 7.0)), x1.getGradient());
 
-    VariableTensor x2 = scalar().variable().withData(data(3.0));
-    ComputedTensor y2 = pow(scalar().withData(data(Math.E)), x2);
+    VariableTensor x2 = scalar().variable().withData(3.0);
+    ComputedTensor y2 = pow(scalar().withData(Math.E), x2);
     y2.startBackpropagation();
-    assertEquals(Math.pow(Math.E, 3.0), x2.getGradient());
+    assertArrayEquals(data(Math.pow(Math.E, 3.0)), x2.getGradient());
 
 
-    VariableTensor x3 = scalar().variable().withData(data(0.5));
-    ComputedTensor y3 = pow(scalar().withData(data(4.0)), x3);
+    VariableTensor x3 = scalar().variable().withData(0.5);
+    ComputedTensor y3 = pow(scalar().withData(4.0), x3);
     y3.startBackpropagation();
-    assertEquals(Math.log(4.0) * Math.pow(4.0, 0.5), x3.getGradient());
+    assertArrayEquals(data(Math.log(4.0) * Math.pow(4.0, 0.5)), x3.getGradient());
 
-    VariableTensor x41 = scalar().variable().withData(data(5.0));
-    VariableTensor x42 = scalar().variable().withData(data(3.0));
+    VariableTensor x41 = scalar().variable().withData(5.0);
+    VariableTensor x42 = scalar().variable().withData(3.0);
     ComputedTensor y4 = pow(x41, x42);
     y4.startBackpropagation();
-    assertEquals(3.0 * Math.pow(5.0, 2.0), x41.getGradient());
-    assertEquals(Math.log(5.0) * Math.pow(5.0, 3.0), x42.getGradient());
-    VariableTensor x5 = scalar().variable().withData(data(3.0));
+    assertArrayEquals(data(3.0 * Math.pow(5.0, 2.0)), x41.getGradient());
+    assertArrayEquals(data(Math.log(5.0) * Math.pow(5.0, 3.0)), x42.getGradient());
+    VariableTensor x5 = scalar().variable().withData(3.0);
     ComputedTensor y5 = pow(x5, x5);
     y5.startBackpropagation();
-    assertEquals((Math.log(3.0) + 1.0) * Math.pow(3.0, 3.0), x5.getGradient());
+    assertArrayEquals(data((Math.log(3.0) + 1.0) * Math.pow(3.0, 3.0)), x5.getGradient());
 
   }
 
   @Test
   void testBasicReluOperation() {
-    VariableTensor x1 = scalar().variable().withData(data(3.0));
+    VariableTensor x1 = scalar().variable().withData(3.0);
     ComputedTensor y1 = relu(x1);
     y1.startBackpropagation();
-    assertEquals(1.0, x1.getGradient());
+    assertArrayEquals(data(1.0), x1.getGradient());
 
-    VariableTensor x2 = scalar().variable().withData(data(-3.0));
+    VariableTensor x2 = scalar().variable().withData(-3.0);
     ComputedTensor y2 = relu(x2);
     y2.startBackpropagation();
-    assertEquals(0.0, x2.getGradient());
+    assertArrayEquals(data(0.0), x2.getGradient());
   }
 
   @Test
@@ -125,21 +125,21 @@ class MathLibraryBackpropagationTest {
 
     Function<VariableTensor, VariableTensor> df = x -> {
       ComputedTensor y = relu(sum(
-          multiply((scalar().withData(data(-0.5))),
-              pow(x, scalar().withData(data(2.0)))),
-          multiply(scalar().withData(data(2.0)), x),
-          scalar().withData(data(6.0))));
+          multiply((scalar().withData(-0.5)),
+              pow(x, scalar().withData(2.0))),
+          multiply(scalar().withData(2.0), x),
+          scalar().withData(6.0)));
       y.startBackpropagation();
       return x;
     };
 
-    assertEquals(0.0, df.apply(scalar().variable().withData(data(-4.0))).getGradient());
-    assertEquals(0.0, df.apply(scalar().variable().withData(data(-2.0))).getGradient());
-    assertEquals(2.0, df.apply(scalar().variable().withData(data(0.0))).getGradient());
-    assertEquals(0.0, df.apply(scalar().variable().withData(data(2.0))).getGradient());
-    assertEquals(-2.0, df.apply(scalar().variable().withData(data(4.0))).getGradient());
-    assertEquals(0.0, df.apply(scalar().variable().withData(data(6.0))).getGradient());
-    assertEquals(0.0, df.apply(scalar().variable().withData(data(8.0))).getGradient());
+    assertArrayEquals(data(0.0), df.apply(scalar().variable().withData(-4.0)).getGradient());
+    assertArrayEquals(data(0.0), df.apply(scalar().variable().withData(-2.0)).getGradient());
+    assertArrayEquals(data(2.0), df.apply(scalar().variable().withData(0.0)).getGradient());
+    assertArrayEquals(data(0.0), df.apply(scalar().variable().withData(2.0)).getGradient());
+    assertArrayEquals(data(-2.0), df.apply(scalar().variable().withData(4.0)).getGradient());
+    assertArrayEquals(data(0.0), df.apply(scalar().variable().withData(6.0)).getGradient());
+    assertArrayEquals(data(0.0), df.apply(scalar().variable().withData(8.0)).getGradient());
 
   }
 

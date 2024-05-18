@@ -19,7 +19,7 @@ class MathOperationsBackpropagation {
           if (i != j) {
             for (int k = 0; k < innerGradient.length; k++) {
               // Mod over the size to broadcast implicitly
-              innerGradient[k] *= operands[j].get(k % operands[j].size()); 
+              innerGradient[k] *= operands[j].get(k % operands[j].size());
             }
           }
         }
@@ -30,22 +30,37 @@ class MathOperationsBackpropagation {
   }
 
   static void pow(double[] outerFunctionGradient, Tensor base, Tensor exponent) {
-    // if (base instanceof Chainable) {
-    // ((Chainable) base).backpropagate(outerFunctionGradient * exponent.getValue()
-    // * Math.pow(base.getValue(), exponent.getValue() - 1));
-    // }
-    //
-    // if (exponent instanceof Chainable) {
-    // ((Chainable) exponent).backpropagate(
-    // outerFunctionGradient
-    // * Math.log(base.getValue())
-    // * Math.pow(base.getValue(), exponent.getValue()));
-    // }
+    if (base instanceof Chainable) {
+      double[] innerGradient = outerFunctionGradient.clone();
+
+      for (int k = 0; k < innerGradient.length; k++) {
+        // Mod over the size to broadcast implicitly
+        innerGradient[k] *= exponent.get(k % exponent.size())
+            * Math.pow(base.get(k % base.size()), exponent.get(k % exponent.size()) - 1);
+      }
+      ((Chainable) base).backpropagate(innerGradient);
+    }
+
+    if (exponent instanceof Chainable) {
+      double[] innerGradient = outerFunctionGradient.clone();
+
+      for (int k = 0; k < innerGradient.length; k++) {
+        // Mod over the size to broadcast implicitly
+        innerGradient[k] *= Math.log(base.get(k % base.size()))
+            * Math.pow(base.get(k % base.size()), exponent.get(k % exponent.size()));
+      }
+      ((Chainable) exponent).backpropagate(innerGradient);
+    }
   }
 
   static void relu(double[] outerFunctionGradient, Tensor operand) {
-    // if (operand instanceof Chainable) {
-    // ((Chainable) operand).backpropagate(operand.getValue() > 0.0 ? outerFunctionGradient : 0.0);
-    // }
+    if (operand instanceof Chainable) {
+      double[] innerGradient = new double[outerFunctionGradient.length];
+      for (int k = 0; k < innerGradient.length; k++) {
+        innerGradient[k] = operand.get(k % operand.size()) > 0.0 ? outerFunctionGradient[k] : 0.0;
+      }
+
+      ((Chainable) operand).backpropagate(innerGradient);
+    }
   }
 }
