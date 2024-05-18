@@ -9,11 +9,8 @@ public class MathLibrary {
 
   // Basic operations
   public static Tensor sum(Tensor... operands) {
-    int[] shape = findResultShape(operands);
-    double[] result = MathOperationsImplementation.sum(broadCast(shape, operands));
-    return new ConstantTensor(result, shape);
+    return Operation.ADDITION.compute(operands);
   }
-
 
   private static Tensor broadCast(int[] shape, Tensor operand) {
     if (!Arrays.equals(shape, operand.getShape()) && operand instanceof Broadcastable) {
@@ -23,7 +20,7 @@ public class MathLibrary {
     }
   }
 
-  private static Tensor[] broadCast(int[] shape, Tensor... operands) {
+  public static Tensor[] broadCast(int[] shape, Tensor... operands) {
     Tensor[] broadcastOperands = new Tensor[operands.length];
     for (int i = 0; i < operands.length; i++) {
       broadcastOperands[i] = broadCast(shape, operands[i]);
@@ -33,25 +30,20 @@ public class MathLibrary {
 
 
   public static Tensor multiply(Tensor... operands) {
-    int[] shape = findResultShape(operands);
-    double[] result = MathOperationsImplementation.multiply(broadCast(shape, operands));
-    return new ConstantTensor(result, shape);
+    return Operation.MULTIPLICATION.compute(operands);
+
   }
 
   public static Tensor pow(Tensor base, Tensor exponent) {
-    int[] shape = findResultShape(base, exponent);
-    double[] result =
-        MathOperationsImplementation.pow(broadCast(shape, base), broadCast(shape, exponent));
-    return new ConstantTensor(result, shape);
+    return Operation.ESPONENTIATION.compute(base, exponent);
   }
 
   public static Tensor relu(Tensor operand) {
-    double[] result = MathOperationsImplementation.relu(operand);
-    return new ConstantTensor(result, operand.getShape().clone());
+    return Operation.RELU.compute(operand);
   }
 
 
-  private static int[] findResultShape(Tensor... operands) {
+  public static int[] findResultShape(Tensor... operands) {
     int[] fullShape = shape();
     for (Tensor t : operands) {
       if (fullShape.length < t.getShape().length) {
@@ -91,11 +83,12 @@ public class MathLibrary {
   }
 
   public static TensorBuilder matrix(int rows, int columns) {
-    return data -> new ConstantTensor(data, shape(rows, columns));
+
+    return new TensorBuilder(shape(rows, columns), (d, s) -> new ConstantTensor(d, s));
   }
 
   public static TensorBuilder constant(int... shape) {
-    return data -> new ConstantTensor(data, shape);
+    return new TensorBuilder(shape, (d, s) -> new ConstantTensor(d, s));
   }
 
 }
