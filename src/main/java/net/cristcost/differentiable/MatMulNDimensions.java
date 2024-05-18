@@ -27,7 +27,7 @@ class MatMulNDimensions {
     int[] indices = new int[tensor.getShape().length + other.getShape().length - 2];
     for (int i = 0; i < resultData.length; i++) {
       resultData[i] = computeElement(indices, tensor, other);
-      incrementIndices(indices, resultShape);
+      Tensor.incrementIndices(indices, resultShape);
     }
 
     return resultData;
@@ -45,9 +45,10 @@ class MatMulNDimensions {
   private static double computeElement(int[] indices, Tensor tensor, Tensor other) {
     int[] thisIndices = new int[tensor.getShape().length];
     int[] otherIndices = new int[other.getShape().length];
+
     System.arraycopy(indices, 0, thisIndices, 0, tensor.getShape().length - 1);
     System.arraycopy(indices, tensor.getShape().length - 1, otherIndices, 1,
-        other.getShape().length - 2);
+        other.getShape().length - 1);
 
     double sum = 0.0;
     for (int k = 0; k < tensor.getShape()[tensor.getShape().length - 1]; k++) {
@@ -58,14 +59,5 @@ class MatMulNDimensions {
     return sum;
   }
 
-  private static void incrementIndices(int[] indices, int[] shape) {
-    for (int i = indices.length - 1; i >= 0; i--) {
-      indices[i]++;
-      if (indices[i] < shape[i]) {
-        break;
-      } else {
-        indices[i] = 0;
-      }
-    }
-  }
+
 }

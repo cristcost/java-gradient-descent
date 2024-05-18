@@ -26,4 +26,9 @@ public class ComputedTensor implements Tensor, Chainable {
   public void backpropagate(double[] outerGradient) {
     fromComputation.getOperation().backpropagate(outerGradient, fromComputation.getOperands());
   }
+  
+  @Override
+  public String toString() {
+    return this.json();
+  }
 }

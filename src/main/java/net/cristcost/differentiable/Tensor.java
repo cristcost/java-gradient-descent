@@ -49,6 +49,19 @@ public interface Tensor {
     }
   }
 
+  public static void incrementIndices(int[] indices, int[] shape) {
+    int cursor = indices.length - 1;
+    indices[cursor]++;
+    while (cursor >= 0 && indices[cursor] >= shape[cursor]) {
+      indices[cursor] = 0;
+      cursor--;
+      if(cursor < 0) {
+        break;
+      }
+      indices[cursor]++;
+    }
+  }
+
   private int calculateIndex(int[] indices) {
     int indicesNdim = indices.length;
     if (indicesNdim == 0) {

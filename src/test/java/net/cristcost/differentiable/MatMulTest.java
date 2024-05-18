@@ -38,5 +38,67 @@ class MatMulTest {
         matmulNdim(matrix1By3.withData(2.0, 3.0, 4.0), matrix3By1.withData(0.5, -3.0, 5.0)));
   }
 
+  @Test
+  void testMatmul() {
+    var matrix3By3 = matrix(3, 3);
+
+
+    // 2 dimensional matrices
+    assertTensorsEquals(
+        matrix3By3.withData(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0),
+        matmul(
+            matrix3By3.withData(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0),
+            eye(3)));
+
+    assertTensorsEquals(
+        matrix3By3.zeros(),
+        matmul(
+            matrix3By3.withData(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0),
+            matrix3By3.zeros()));
+
+    assertTensorsEquals(
+        multiply(matrix3By3.ones(), scalar(3.0)),
+        matmul(
+            matrix3By3.ones(),
+            matrix3By3.ones()));
+
+    assertTensorsEquals(
+        matrix3By3.withData(-5.0, 2.0, 11.0, -17.0, 2.0, 23.0, -29.0, 2.0, 35.0),
+        matmul(
+            matrix3By3.withData(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0),
+            matrix3By3.withData(-3.0, -1.0, 0.0, -1.0, 0.0, 1.0, 0.0, 1.0, 3.0)));
+
+
+    // N dimensional arrays
+    ConstantTensor expected = matrix3By3.withData(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
+    ComputedTensor actual = matmulNdim(
+        matrix3By3.withData(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0),
+        eye(3));
+    System.out.println(expected);
+    System.out.println(actual);
+    assertTensorsEquals(
+        expected,
+        actual);
+
+    assertTensorsEquals(
+        matrix3By3.zeros(),
+        matmulNdim(
+            matrix3By3.withData(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0),
+            matrix3By3.zeros()));
+
+    assertTensorsEquals(
+        multiply(matrix3By3.ones(), scalar(3.0)),
+        matmulNdim(
+            matrix3By3.ones(),
+            matrix3By3.ones()));
+
+    assertTensorsEquals(
+        matrix3By3.withData(-5.0, 2.0, 11.0, -17.0, 2.0, 23.0, -29.0, 2.0, 35.0),
+        matmulNdim(
+            matrix3By3.withData(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0),
+            matrix3By3.withData(-3.0, -1.0, 0.0, -1.0, 0.0, 1.0, 0.0, 1.0, 3.0)));
+
+  }
+
 
 }

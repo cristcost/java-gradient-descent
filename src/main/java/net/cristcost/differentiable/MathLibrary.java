@@ -57,6 +57,23 @@ public class MathLibrary {
     return shape.clone();
   }
 
+  public static int[] index(int... indices) {
+    return indices.clone();
+  }
+
+  public static ConstantTensor eye(int n) {
+    var squareMatrix = TensorBuilder.builder(shape(n, n));
+    return squareMatrix.withData((i, j) -> i == j ? 1.0 : 0.0);
+  }
+
+  public static ConstantTensor scalar(double value) {
+    return scalar().withData(value);
+  }
+
+  public static ConstantTensor vector(double... values) {
+    return vector(values.length).withData(values);
+  }
+
   public static TensorBuilder<ConstantTensor> scalar() {
     return TensorBuilder.builder(shape());
   }
@@ -68,6 +85,7 @@ public class MathLibrary {
   public static TensorBuilder<ConstantTensor> matrix(int rows, int columns) {
     return TensorBuilder.builder(shape(rows, columns));
   }
+
 
   public static TensorBuilder<ConstantTensor> tensor(int... shape) {
     return TensorBuilder.builder(shape);
