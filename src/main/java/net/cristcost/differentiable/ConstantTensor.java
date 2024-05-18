@@ -49,6 +49,11 @@ public class ConstantTensor implements Tensor, Broadcastable {
       return broadcastShape;
     }
 
+    @Override
+    public String toString() {
+      return this.json();
+    }
+
   }
 
 

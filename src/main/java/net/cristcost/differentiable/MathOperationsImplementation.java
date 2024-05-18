@@ -57,8 +57,12 @@ class MathOperationsImplementation {
     return MatMul2.matmul(tensor, other);
   }
 
-  private static class MatMul2 {
-    public static double[] matmul(Tensor tensor, Tensor other) {
+  static double[] matmulNdim(Tensor tensor, Tensor other) {
+    return MatMulNDimensions.matmul(tensor, other);
+  }
+
+  static class MatMul2 {
+    static double[] matmul(Tensor tensor, Tensor other) {
       validateMatrixCompatibility(tensor, other);
 
       double[] resultData = new double[tensor.getShape()[0] * other.getShape()[1]];
@@ -76,11 +80,11 @@ class MathOperationsImplementation {
           }
         }
       }
-      
+
       return resultData;
     }
 
-    public static int[] matmulShape(Tensor tensor, Tensor other) {
+    static int[] matmulShape(Tensor tensor, Tensor other) {
 
       validateMatrixCompatibility(tensor, other);
 
@@ -104,9 +108,9 @@ class MathOperationsImplementation {
 
   }
 
-  private static class MatMulNDimensions {
+  static class MatMulNDimensions {
 
-    public static double[] matmul(Tensor tensor, Tensor other) {
+    static double[] matmul(Tensor tensor, Tensor other) {
       // Check if both arrays have at least 2 dimensions
       if (tensor.getShape().length < 2 || other.getShape().length < 2) {
         throw new IllegalArgumentException(
@@ -135,7 +139,7 @@ class MathOperationsImplementation {
       return resultData;
     }
 
-    public static int[] matmulShape(Tensor tensor, Tensor other) {
+    static int[] matmulShape(Tensor tensor, Tensor other) {
       // Compute the shape of the result array
       int[] resultShape = new int[tensor.getShape().length + other.getShape().length - 2];
       System.arraycopy(tensor.getShape(), 0, resultShape, 0, tensor.getShape().length - 1);
@@ -171,6 +175,4 @@ class MathOperationsImplementation {
       }
     }
   }
-
-
 }
