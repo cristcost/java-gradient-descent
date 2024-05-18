@@ -1,12 +1,12 @@
 package net.cristcost.differentiable;
 
-public class MathOperationShapeComputation {
+class MathOperationShapeComputation {
 
-  public static int[] identity(Tensor tensor) {
+  static int[] identity(Tensor tensor) {
     return tensor.getShape();
   }
 
-  public static int[] maxShape(Tensor... operands) {
+  static int[] maxShape(Tensor... operands) {
     int[] fullShape = MathLibrary.shape();
     for (Tensor t : operands) {
       if (fullShape.length < t.getShape().length) {

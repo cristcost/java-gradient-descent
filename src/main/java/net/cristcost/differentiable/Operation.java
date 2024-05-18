@@ -34,14 +34,14 @@ enum Operation {
 
   MATMUL(
       false,
-      operands -> MathOperationsImplementation.matmul(operands[0], operands[1]),
-      Operation::resultShapeNotImplemented,
+      operands -> MatMul2.matmul(operands[0], operands[1]),
+      operands -> MatMul2.matmulShape(operands[0], operands[1]),      
       Operation::backPropagationNotImplemented),
 
   MATMUL_NDIM(
       false,
-      operands -> MathOperationsImplementation.matmulNdim(operands[0], operands[1]),
-      Operation::resultShapeNotImplemented,
+      operands -> MatMulNDimensions.matmul(operands[0], operands[1]),
+      operands -> MatMulNDimensions.matmulShape(operands[0], operands[1]),
       Operation::backPropagationNotImplemented),
 
   SOFTMAX(
