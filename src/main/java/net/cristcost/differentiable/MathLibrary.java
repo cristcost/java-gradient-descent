@@ -25,6 +25,10 @@ public class MathLibrary {
     return Operation.RELU.compute(operand);
   }
 
+  public static ComputedTensor matmul(Tensor input, Tensor other) {
+    return Operation.MATMUL.compute(input, other);
+  }
+
   private static Tensor broadCast(int[] shape, Tensor operand) {
     if (!Arrays.equals(shape, operand.getShape()) && operand instanceof Broadcastable) {
       return ((Broadcastable) operand).broadcast(shape);

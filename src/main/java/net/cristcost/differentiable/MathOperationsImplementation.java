@@ -53,7 +53,7 @@ class MathOperationsImplementation {
     return data;
   }
 
-  public double[] matmul(Tensor tensor, Tensor other) {
+  static double[] matmul(Tensor tensor, Tensor other) {
     return MatMul2.matmul(tensor, other);
   }
 

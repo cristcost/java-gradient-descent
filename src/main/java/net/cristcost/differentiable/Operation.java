@@ -17,18 +17,24 @@ enum Operation {
 
   ESPONENTIATION(
       operands -> MathOperationsImplementation.pow(operands[0], operands[1]),
-      (grad, operands) -> MathOperationsBackpropagation.pow(grad, operands[0], operands[1])
-
-  ),
+      (grad, operands) -> MathOperationsBackpropagation.pow(grad, operands[0], operands[1])),
 
   RELU(
       operands -> MathOperationsImplementation.relu(operands[0]),
       (grad, operands) -> MathOperationsBackpropagation.relu(grad, operands[0])),
-  
-  
-  DOT(null, null), // TODO
-  SOFTMAX(null, null), // TODO
-  MSE(null, null); // TODO
+
+
+  MATMUL(
+      operands -> MathOperationsImplementation.matmul(operands[0], operands[1]),
+      Operation::notImplemented),
+
+  SOFTMAX(
+      Operation::notImplemented,
+      Operation::notImplemented),
+
+  MSE(
+      Operation::notImplemented,
+      Operation::notImplemented);
 
 
   private final Function<Tensor[], double[]> operationFunction;
@@ -47,5 +53,14 @@ enum Operation {
   void backpropagate(double[] gradient, Tensor... operands) {
     backpropagationFunction.accept(gradient, operands);
   }
+
+  private static double[] notImplemented(Tensor... operands) {
+    throw new UnsupportedOperationException("Not yet implemented");
+  }
+
+  private static void notImplemented(double[] gradient, Tensor... operands) {
+    throw new UnsupportedOperationException("Not yet implemented");
+  }
+
 
 }
