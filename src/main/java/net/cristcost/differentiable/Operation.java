@@ -23,7 +23,12 @@ enum Operation {
 
   RELU(
       operands -> MathOperationsImplementation.relu(operands[0]),
-      (grad, operands) -> MathOperationsBackpropagation.relu(grad, operands[0]));
+      (grad, operands) -> MathOperationsBackpropagation.relu(grad, operands[0])),
+  
+  
+  DOT(null, null), // TODO
+  SOFTMAX(null, null), // TODO
+  MSE(null, null); // TODO
 
 
   private final Function<Tensor[], double[]> operationFunction;
@@ -34,8 +39,6 @@ enum Operation {
   public ComputedTensor compute(Tensor... operands) {
     int[] shape = MathLibrary.findResultShape(operands);
     double[] operationResult = operationFunction.apply(MathLibrary.broadCast(shape, operands));
-    // double[] result = MathOperationsImplementation.multiply(broadCast(shape, operands));
-    // return new ConstantTensor(result, shape);
 
     Computation computation = new Computation(this, operands);
     return new ComputedTensor(operationResult, shape, computation);

@@ -8,8 +8,21 @@ import java.util.Arrays;
 public class MathLibrary {
 
   // Basic operations
-  public static Tensor sum(Tensor... operands) {
+  public static ComputedTensor sum(Tensor... operands) {
     return Operation.ADDITION.compute(operands);
+  }
+
+  public static ComputedTensor multiply(Tensor... operands) {
+    return Operation.MULTIPLICATION.compute(operands);
+
+  }
+
+  public static ComputedTensor pow(Tensor base, Tensor exponent) {
+    return Operation.ESPONENTIATION.compute(base, exponent);
+  }
+
+  public static ComputedTensor relu(Tensor operand) {
+    return Operation.RELU.compute(operand);
   }
 
   private static Tensor broadCast(int[] shape, Tensor operand) {
@@ -27,21 +40,6 @@ public class MathLibrary {
     }
     return broadcastOperands;
   }
-
-
-  public static Tensor multiply(Tensor... operands) {
-    return Operation.MULTIPLICATION.compute(operands);
-
-  }
-
-  public static Tensor pow(Tensor base, Tensor exponent) {
-    return Operation.ESPONENTIATION.compute(base, exponent);
-  }
-
-  public static Tensor relu(Tensor operand) {
-    return Operation.RELU.compute(operand);
-  }
-
 
   public static int[] findResultShape(Tensor... operands) {
     int[] fullShape = shape();
