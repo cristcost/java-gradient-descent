@@ -16,13 +16,11 @@ class TensorToStringTest {
 
     Tensor tensor = scalar().withData(42.0);
     assertEquals(objectMapper.readTree("42.0"), objectMapper.readTree(tensor.json()));
-    double[] value = {42.0};
 
-    tensor = vector(value.length).withData(value);
+    tensor = vector(1).withData(42.0);
     assertEquals(objectMapper.readTree("[42.0]"), objectMapper.readTree(tensor.json()));
-    double[] value1 = {3, 2, 1};
 
-    tensor = vector(value1.length).withData(value1);
+    tensor = vector(3).withData(3, 2, 1);
     assertEquals(objectMapper.readTree("[3.0, 2.0, 1.0]"),
         objectMapper.readTree(tensor.json()));
 

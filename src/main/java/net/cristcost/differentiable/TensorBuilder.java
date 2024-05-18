@@ -3,6 +3,7 @@ package net.cristcost.differentiable;
 import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
+import java.util.random.RandomGenerator;
 
 
 public class TensorBuilder<T extends Tensor> {
@@ -32,7 +33,7 @@ public class TensorBuilder<T extends Tensor> {
 
   public TensorBuilder<VariableTensor> variable() {
     if (tensorType == VariableTensor.class) {
-      // Reuse himself if by chance this is called twice 
+      // Reuse himself if by chance this is called twice
       return (TensorBuilder<VariableTensor>) this;
     } else if (variableTensorBuilder == null) {
       // Reuse the variableTensorBuilder as shape is final and can't change
@@ -71,5 +72,13 @@ public class TensorBuilder<T extends Tensor> {
       data[i] = randomFunction.get();
     }
     return withData(data);
+  }
+
+  public T normal(double mean, double standarDeviation) {
+    return rand(() -> RandomGenerator.getDefault().nextGaussian(mean, standarDeviation));
+  }
+
+  public T uniform(double minval, double maxval) {
+    return rand(() -> RandomGenerator.getDefault().nextDouble(minval, minval));
   }
 }
