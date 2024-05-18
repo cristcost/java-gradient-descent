@@ -62,43 +62,24 @@ public class MathLibrary {
     return shape.clone();
   }
 
-  public static Tensor zeros_like(Tensor ref) {
-    double[] data = new double[ref.size()];
-    Arrays.fill(data, 0.0);
-    return new ConstantTensor(data, ref.getShape().clone());
-  }
-
-  public static Tensor ones_like(Tensor ref) {
-    double[] data = new double[ref.size()];
-    Arrays.fill(data, 1.0);
-    return new ConstantTensor(data, ref.getShape().clone());
-  }
-
-
-  @Deprecated
-  public static ConstantTensor scalar(double value) {
-    return scalar().withData(value);
-  }
-
-  @Deprecated
-  public static ConstantTensor vector(double... value) {
-    return vector(value.length).withData(value);
-  }
-
   public static TensorBuilder<ConstantTensor> scalar() {
-    return TensorBuilder.constant(shape());
+    return TensorBuilder.builder(shape());
   }
 
   public static TensorBuilder<ConstantTensor> vector(int lenght) {
-    return TensorBuilder.constant(shape(lenght));
+    return TensorBuilder.builder(shape(lenght));
   }
 
   public static TensorBuilder<ConstantTensor> matrix(int rows, int columns) {
-    return TensorBuilder.constant(shape(rows, columns));
+    return TensorBuilder.builder(shape(rows, columns));
   }
 
   public static TensorBuilder<ConstantTensor> tensor(int... shape) {
-    return TensorBuilder.constant(shape);
+    return TensorBuilder.builder(shape);
+  }
+
+  public static TensorBuilder<ConstantTensor> like(Tensor ref) {
+    return TensorBuilder.builder(ref.getShape());
   }
 
 }

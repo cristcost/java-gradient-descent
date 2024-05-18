@@ -11,7 +11,13 @@ public class TensorBuilder<T extends Tensor> {
 
   private final BiFunction<double[], int[], T> buildFunction;
 
-  private TensorBuilder(int[] shape, BiFunction<double[], int[], T> buildFunction) {
+  private final Class<T> tensorType;
+
+  private TensorBuilder<VariableTensor> variableTensorBuilder;
+
+  private TensorBuilder(Class<T> tensorType, int[] shape,
+      BiFunction<double[], int[], T> buildFunction) {
+    this.tensorType = tensorType;
     this.shape = shape;
     this.buildFunction = buildFunction;
   }
@@ -20,16 +26,20 @@ public class TensorBuilder<T extends Tensor> {
     return buildFunction.apply(data, shape);
   }
 
-  public static TensorBuilder<ConstantTensor> constant(int[] shape) {
-    return new TensorBuilder<>(shape, (d, s) -> new ConstantTensor(d, s));
-  }
-  
-  public TensorBuilder<ConstantTensor> constant() {
-    return new TensorBuilder<>(this.shape, (d, s) -> new ConstantTensor(d, s));
+  public static TensorBuilder<ConstantTensor> builder(int[] shape) {
+    return new TensorBuilder<>(ConstantTensor.class, shape, (d, s) -> new ConstantTensor(d, s));
   }
 
   public TensorBuilder<VariableTensor> variable() {
-    return new TensorBuilder<>(this.shape, (d, s) -> new VariableTensor(d, s));
+    if (tensorType == VariableTensor.class) {
+      // Reuse himself if by chance this is called twice 
+      return (TensorBuilder<VariableTensor>) this;
+    } else if (variableTensorBuilder == null) {
+      // Reuse the variableTensorBuilder as shape is final and can't change
+      variableTensorBuilder = new TensorBuilder<>(VariableTensor.class, this.shape,
+          (d, s) -> new VariableTensor(d, s));
+    }
+    return variableTensorBuilder;
   }
 
 

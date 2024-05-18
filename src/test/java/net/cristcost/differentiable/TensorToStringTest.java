@@ -14,13 +14,15 @@ class TensorToStringTest {
   @Test
   void test() throws JsonMappingException, JsonProcessingException {
 
-    Tensor tensor = scalar(42.0);
+    Tensor tensor = scalar().withData(42.0);
     assertEquals(objectMapper.readTree("42.0"), objectMapper.readTree(tensor.json()));
+    double[] value = {42.0};
 
-    tensor = vector(42.0);
+    tensor = vector(value.length).withData(value);
     assertEquals(objectMapper.readTree("[42.0]"), objectMapper.readTree(tensor.json()));
+    double[] value1 = {3, 2, 1};
 
-    tensor = vector(3, 2, 1);
+    tensor = vector(value1.length).withData(value1);
     assertEquals(objectMapper.readTree("[3.0, 2.0, 1.0]"),
         objectMapper.readTree(tensor.json()));
 

@@ -16,7 +16,7 @@ public class CheckSampleMatricesComputationalGraphs {
 
   public static Tensor factorial(int n) {
     if (n > 1) {
-      return multiply(scalar(n), factorial(n - 1));
+      return multiply(scalar().withData((double) n), factorial(n - 1));
     } else {
       return matrix(2,2).repeat(n);
     }
@@ -26,9 +26,9 @@ public class CheckSampleMatricesComputationalGraphs {
     Tensor x = matrix(2,2).repeat(value);
 
     return relu(sum(
-        multiply((scalar(-0.5)), pow(x, scalar(2.0))),
-        multiply(scalar(2.0), x),
-        scalar(6.0)));
+        multiply((scalar().withData(-0.5)), pow(x, scalar().withData(2.0))),
+        multiply(scalar().withData(2.0), x),
+        scalar().withData(6.0)));
   }
 
   public static void main(String[] args) {

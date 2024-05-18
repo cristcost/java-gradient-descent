@@ -10,25 +10,25 @@ public class CheckSampleComputationalGraphs {
     if (n > 1) {
       return sum(fibonacci(n - 1), fibonacci(n - 2));
     } else {
-      return scalar(n);
+      return scalar().withData((double) n);
     }
   }
 
   public static Tensor factorial(int n) {
     if (n > 1) {
-      return multiply(scalar(n), factorial(n - 1));
+      return multiply(scalar().withData((double) n), factorial(n - 1));
     } else {
-      return scalar(1);
+      return scalar().withData((double) 1);
     }
   }
 
   public static Tensor reluQuadraticFunction(double value) {
-    Tensor x = scalar(value);
+    Tensor x = scalar().withData(value);
 
     return relu(sum(
-        multiply((scalar(-0.5)), pow(x, scalar(2.0))),
-        multiply(scalar(2.0), x),
-        scalar(6.0)));
+        multiply((scalar().withData(-0.5)), pow(x, scalar().withData(2.0))),
+        multiply(scalar().withData(2.0), x),
+        scalar().withData(6.0)));
   }
 
   public static void main(String[] args) {
