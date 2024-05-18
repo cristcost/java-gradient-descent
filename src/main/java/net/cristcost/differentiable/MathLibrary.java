@@ -74,21 +74,31 @@ public class MathLibrary {
     return new ConstantTensor(data, ref.getShape().clone());
   }
 
-  public static Tensor scalar(double value) {
-    return new ConstantTensor(data(value), shape());
+
+  @Deprecated
+  public static ConstantTensor scalar(double value) {
+    return scalar().withData(value);
   }
 
-  public static Tensor vector(double... value) {
-    return new ConstantTensor(value, shape(value.length));
+  @Deprecated
+  public static ConstantTensor vector(double... value) {
+    return vector(value.length).withData(value);
   }
 
-  public static TensorBuilder matrix(int rows, int columns) {
-
-    return new TensorBuilder(shape(rows, columns), (d, s) -> new ConstantTensor(d, s));
+  public static TensorBuilder<ConstantTensor> scalar() {
+    return TensorBuilder.constant(shape());
   }
 
-  public static TensorBuilder constant(int... shape) {
-    return new TensorBuilder(shape, (d, s) -> new ConstantTensor(d, s));
+  public static TensorBuilder<ConstantTensor> vector(int lenght) {
+    return TensorBuilder.constant(shape(lenght));
+  }
+
+  public static TensorBuilder<ConstantTensor> matrix(int rows, int columns) {
+    return TensorBuilder.constant(shape(rows, columns));
+  }
+
+  public static TensorBuilder<ConstantTensor> tensor(int... shape) {
+    return TensorBuilder.constant(shape);
   }
 
 }

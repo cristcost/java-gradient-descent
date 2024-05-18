@@ -1,6 +1,6 @@
 package net.cristcost.differentiable;
 
-import static net.cristcost.differentiable.MathLibrary.constant;
+import static net.cristcost.differentiable.MathLibrary.tensor;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +8,7 @@ class BroadcastableTest {
 
   @Test
   void testBroadcastMatrix() {
-    var builder = constant(3, 3);
+    var builder = tensor(3, 3);
 
     Tensor tensor = builder.withData(1, 2, 3, 4, 5, 6, 7, 8, 9);
 
@@ -74,7 +74,7 @@ class BroadcastableTest {
 
   @Test
   void temp() {
-    var builder = constant(3, 3);
+    var builder = tensor(3, 3);
 
     Tensor tensor = builder.withData(1, 2, 3, 4, 5, 6, 7, 8, 9);
     assertEquals(1.0, tensor.broadcastable(b -> b.broadcast(2, 3, 3)).get().get(0, 9));
