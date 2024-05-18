@@ -1,6 +1,7 @@
 package net.cristcost.differentiable;
 
 import static net.cristcost.differentiable.MathLibrary.*;
+import static net.cristcost.differentiable.TensorAsserts.assertTensorsEquals;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.function.Function;
 import org.junit.jupiter.api.Test;
@@ -115,6 +116,44 @@ class MathLibraryBackpropagationTest {
     ComputedTensor y2 = relu(x2);
     y2.startBackpropagation();
     assertArrayEquals(data(0.0), x2.getGradient());
+  }
+
+  @Test
+  void testDotProductOperation() {
+
+    VariableTensor x1 = vector(1).variable().withData(3.0);
+    ComputedTensor y1 = dot(x1, vector(2.0));
+    assertTensorsEquals(scalar(6.0), y1);
+    y1.startBackpropagation();
+    assertArrayEquals(data(2.0), x1.getGradient());
+
+
+    VariableTensor x2 = vector(3).variable().withData(3.0, 4.0, 5.0);
+    ComputedTensor y2 = dot(x2, vector(2.0, 0.5, -1.0));
+    assertTensorsEquals(scalar(3.0 * 2.0 + 0.5 * 4.0 - 5.0), y2);
+    y2.startBackpropagation();
+    assertArrayEquals(data(2.0, 0.5, -1.0), x2.getGradient());
+
+    VariableTensor x3 = vector(3).variable().withData(3.0, 4.0, 5.0);
+    ComputedTensor y3 = dot(x3, x3);
+    assertTensorsEquals(scalar(9.0 + 16.0 + 25.0), y3);
+    y3.startBackpropagation();
+    assertArrayEquals(data(6.0, 8.0, 10.0), x3.getGradient());
+  }
+
+  @Test
+  void testSoftMaxProductOperation() {
+    fail("Test todo");
+  }
+
+  @Test
+  void testMseProductOperation() {
+    fail("Test todo");
+  }
+
+  @Test
+  void testMatMulOperation() {
+    fail("Test todo");
   }
 
   @Test

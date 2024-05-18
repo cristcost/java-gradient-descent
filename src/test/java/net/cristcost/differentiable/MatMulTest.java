@@ -70,15 +70,11 @@ class MatMulTest {
 
 
     // N dimensional arrays
-    ConstantTensor expected = matrix3By3.withData(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
-    ComputedTensor actual = matmulNdim(
-        matrix3By3.withData(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0),
-        eye(3));
-    System.out.println(expected);
-    System.out.println(actual);
     assertTensorsEquals(
-        expected,
-        actual);
+        matrix3By3.withData(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0),
+        matmulNdim(
+            matrix3By3.withData(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0),
+            eye(3)));
 
     assertTensorsEquals(
         matrix3By3.zeros(),

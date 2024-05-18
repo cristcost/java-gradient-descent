@@ -32,6 +32,12 @@ enum Operation {
       (grad, operands) -> MathOperationsBackpropagation.relu(grad, operands[0])),
 
 
+  DOT(
+      false,
+      operands -> DotProduct.dot(operands[0], operands[1]),
+      operands -> DotProduct.shape(operands[0], operands[1]),      
+      (grad, operands) -> DotProduct.chain(grad, operands[0], operands[1])),
+  
   MATMUL(
       false,
       operands -> MatMul2.matmul(operands[0], operands[1]),

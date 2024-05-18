@@ -25,6 +25,10 @@ public class MathLibrary {
     return Operation.RELU.compute(operand);
   }
 
+  public static ComputedTensor dot(Tensor a, Tensor b) {
+    return Operation.DOT.compute(a, b);
+  }
+
   public static ComputedTensor matmul(Tensor input, Tensor other) {
     return Operation.MATMUL.compute(input, other);
   }
