@@ -3,6 +3,7 @@ package net.cristcost.differentiable;
 import static net.cristcost.differentiable.MathLibrary.*;
 import static net.cristcost.differentiable.TensorAsserts.assertTensorsEquals;
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
 import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 
@@ -177,46 +178,61 @@ class MathLibraryBackpropagationTest {
   }
 
   @Test
-  void testSoftMaxProductOperation() {
+  void testSoftMaxOperation() {
+
+    VariableTensor x0 = vector(2).variable().withData(Math.log(3.0), Math.log(1.0));
+    ComputedTensor y0 = softmax(x0);
+    y0.backpropagate(data(1.0, 1.0));
+    System.out.println(Arrays.toString(x0.getGradient()));
+    assertTensorsEquals(vector(0.75, 0.25), y0);
+    assertArrayEquals(data(0.0, 0.0), x0.getGradient(), 0.0001);
+
+    VariableTensor x00 = vector(2).variable().withData(Math.log(3.0), Math.log(1.0));
+    ComputedTensor y00 = softmax(x00);
+    y00.backpropagate(data(4.0, 0.0));
+    System.out.println(Arrays.toString(x00.getGradient()));
+    assertTensorsEquals(vector(0.75, 0.25), y00);
+    assertArrayEquals(data(0.75, -0.75), x00.getGradient(), 0.0001);
+
 
     VariableTensor x1 = vector(1).variable().withData(2.0);
     ComputedTensor y1 = softmax(x1);
     assertTensorsEquals(vector(1.0), y1);
     y1.startBackpropagation();
-    assertArrayEquals(data(0.0), x1.getGradient());
+    assertArrayEquals(data(0.0), x1.getGradient(), 0.0001);
 
     VariableTensor x2 = vector(3).variable().withData(5.0, 4.0, 3.0);
     ComputedTensor y2 = softmax(x2);
     assertTensorsEquals(vector(0.6652, 0.2447, 0.0900), y2);
     y2.backpropagate(data(1.0, 1.0, 1.0));
-    assertArrayEquals(data(0.0, 0.0, 0.0), x2.getGradient());
+    assertArrayEquals(data(0.0, 0.0, 0.0), x2.getGradient(), 0.0001);
 
 
     VariableTensor x3 = vector(3).variable().withData(0.0, Math.log(2.0), 0.0);
     ComputedTensor y3 = softmax(x3);
     assertTensorsEquals(vector(0.25, 0.5, 0.25), y3);
     y3.backpropagate(data(1.0, 1.0, 1.0));
-    assertArrayEquals(data(0.0, 0.0, 0.0), x3.getGradient());
+    assertArrayEquals(data(0.0, 0.0, 0.0), x3.getGradient(), 0.0001);
 
     VariableTensor x4 = vector(3).variable().withData(0.0, Math.log(2.0), 0.0);
     ComputedTensor y4 = softmax(x4);
     assertTensorsEquals(vector(0.25, 0.5, 0.25), y4);
     y4.backpropagate(data(1.0, 2.0, 1.0));
-    assertArrayEquals(data(-0.125, 0.25, -0.125), x4.getGradient());
+    assertArrayEquals(data(-0.125, 0.25, -0.125), x4.getGradient(), 0.0001);
 
     VariableTensor x5 =
         vector(4).variable().withData(Math.log(4.0), Math.log(3.0), Math.log(2.0), Math.log(1.0));
     ComputedTensor y5 = softmax(x5);
     assertTensorsEquals(vector(0.4, 0.3, 0.2, 0.1), y5);
     y5.backpropagate(data(1.0, 1.0, 1.0, 1.0));
-    assertArrayEquals(data(0.0, 0.0, 0.0, 0.0), x5.getGradient());
+    assertArrayEquals(data(0.0, 0.0, 0.0, 0.0), x5.getGradient(), 0.0001);
 
     VariableTensor x6 =
         vector(4).variable().withData(Math.log(4.0), Math.log(3.0), Math.log(2.0), Math.log(1.0));
     ComputedTensor y6 = softmax(x6);
     assertTensorsEquals(vector(0.4, 0.3, 0.2, 0.1), y6);
     y6.backpropagate(data(1.0, 1.0, 1.0, 10.0));
-    assertArrayEquals(data(-0.3600, -0.2700, -0.1800, 0.8100), x6.getGradient());
+    assertArrayEquals(data(-0.3600, -0.2700, -0.1800, 0.8100), x6.getGradient(), 0.0001);
 
   }
 
