@@ -61,6 +61,22 @@ public class MathLibrary {
     return broadcastOperands;
   }
 
+  public static Tensor transpose(Tensor tensor) {
+    int rows = tensor.getShape()[0];
+    int cols = tensor.getShape()[1];
+
+    double[] matrix = tensor.getData();
+    double[] transposed = new double[tensor.size()];
+
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        transposed[j * rows + i] = matrix[i * cols + j];
+      }
+    }
+
+    return new ConstantTensor(transposed, new int[] {cols, rows});
+  }
+
   public static double[] data(double... data) {
     return data;
   }

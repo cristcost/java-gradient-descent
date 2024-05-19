@@ -47,4 +47,24 @@ class MatMul2 {
     }
   }
 
+  public static void chain(double[] outerFunctionGradient, Tensor a, Tensor b) {
+
+    Tensor outerFunctionGradientTensor =
+        MathLibrary.tensor(matmulShape(a, b)).withData(outerFunctionGradient);
+
+    if (a instanceof Chainable) {
+      Tensor bTransposed = MathLibrary.transpose(b);
+      double[] innerGradient = matmul(outerFunctionGradientTensor, bTransposed);
+
+      ((Chainable) a).backpropagate(innerGradient);
+    }
+
+    if (b instanceof Chainable) {
+
+      Tensor aTransposed = MathLibrary.transpose(a);
+      double[] innerGradient = matmul(aTransposed, outerFunctionGradientTensor);
+
+      ((Chainable) b).backpropagate(innerGradient);
+    }
+  }
 }

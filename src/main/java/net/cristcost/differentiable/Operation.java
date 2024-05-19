@@ -53,7 +53,7 @@ enum Operation {
       false,
       operands -> MatMul2.matmul(operands[0], operands[1]),
       operands -> MatMul2.matmulShape(operands[0], operands[1]),
-      Operation::backPropagationNotImplemented),
+      (grad, operands) -> MatMul2.chain(grad, operands[0], operands[1])),
 
   MATMUL_NDIM(
       false,

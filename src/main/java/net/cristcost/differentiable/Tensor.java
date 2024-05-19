@@ -55,7 +55,7 @@ public interface Tensor {
     while (cursor >= 0 && indices[cursor] >= shape[cursor]) {
       indices[cursor] = 0;
       cursor--;
-      if(cursor < 0) {
+      if (cursor < 0) {
         break;
       }
       indices[cursor]++;

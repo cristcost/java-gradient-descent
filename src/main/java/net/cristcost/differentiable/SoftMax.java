@@ -28,15 +28,20 @@ class SoftMax {
 
     validateVectorCompatibility(tensor);
 
-    double[] softmax = softmax(tensor);
-    
     if (tensor instanceof Chainable) {
+      double[] softmax = new double[tensor.size()];
       double[] innerGradient = new double[tensor.size()];
+      double sum = 0.0;
+
+      for (int i = 0; i < tensor.size(); i++) {
+        softmax[i] = Math.exp(tensor.get(i));
+        sum += softmax[i];
+      }
 
       for (int i = 0; i < innerGradient.length; i++) {
         for (int j = 0; j < innerGradient.length; j++) {
           double delta = (i == j) ? 1.0 : 0.0;
-          innerGradient[i] += outerFunctionGradient[j] * softmax[i] * (delta - softmax[j]);
+          innerGradient[i] += outerFunctionGradient[j] * softmax[i]/ sum * (delta - softmax[j]/ sum);
         }
       }
       ((Chainable) tensor).backpropagate(innerGradient);
