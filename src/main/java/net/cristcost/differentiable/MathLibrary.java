@@ -29,6 +29,14 @@ public class MathLibrary {
     return Operation.DOT.compute(a, b);
   }
 
+  public static ComputedTensor mse(Tensor a, Tensor b) {
+    return Operation.MSE.compute(a, b);
+  }
+
+  public static ComputedTensor softmax(Tensor operand) {
+    return Operation.SOFTMAX.compute(operand);
+  }
+
   public static ComputedTensor matmul(Tensor input, Tensor other) {
     return Operation.MATMUL.compute(input, other);
   }

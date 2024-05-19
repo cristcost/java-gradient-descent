@@ -35,13 +35,13 @@ enum Operation {
   DOT(
       false,
       operands -> DotProduct.dot(operands[0], operands[1]),
-      operands -> DotProduct.shape(operands[0], operands[1]),      
+      operands -> DotProduct.shape(operands[0], operands[1]),
       (grad, operands) -> DotProduct.chain(grad, operands[0], operands[1])),
-  
+
   MATMUL(
       false,
       operands -> MatMul2.matmul(operands[0], operands[1]),
-      operands -> MatMul2.matmulShape(operands[0], operands[1]),      
+      operands -> MatMul2.matmulShape(operands[0], operands[1]),
       Operation::backPropagationNotImplemented),
 
   MATMUL_NDIM(
@@ -58,9 +58,9 @@ enum Operation {
 
   MSE(
       false,
-      Operation::operationNotImplemented,
-      Operation::resultShapeNotImplemented,
-      Operation::backPropagationNotImplemented);
+      operands -> MeanSquareError.mse(operands[0], operands[1]),
+      operands -> MeanSquareError.shape(operands[0], operands[1]),
+      (grad, operands) -> MeanSquareError.chain(grad, operands[0], operands[1]));
 
   private final boolean broadcastSupported;
 
