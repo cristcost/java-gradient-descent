@@ -31,12 +31,23 @@ enum Operation {
       operands -> MathOperationShapeComputation.identity(operands[0]),
       (grad, operands) -> MathOperationsBackpropagation.relu(grad, operands[0])),
 
-
   DOT(
       false,
       operands -> DotProduct.dot(operands[0], operands[1]),
       operands -> DotProduct.shape(operands[0], operands[1]),
       (grad, operands) -> DotProduct.chain(grad, operands[0], operands[1])),
+
+  MSE(
+      false,
+      operands -> MeanSquareError.mse(operands[0], operands[1]),
+      operands -> MeanSquareError.shape(operands[0], operands[1]),
+      (grad, operands) -> MeanSquareError.chain(grad, operands[0], operands[1])),
+
+  SOFTMAX(
+      false,
+      operands -> SoftMax.softmax(operands[0]),
+      operands -> MathOperationShapeComputation.identity(operands[0]),
+      (grad, operands) -> SoftMax.chain(grad, operands[0])),
 
   MATMUL(
       false,
@@ -50,17 +61,7 @@ enum Operation {
       operands -> MatMulNDimensions.matmulShape(operands[0], operands[1]),
       Operation::backPropagationNotImplemented),
 
-  SOFTMAX(
-      false,
-      Operation::operationNotImplemented,
-      Operation::resultShapeNotImplemented,
-      Operation::backPropagationNotImplemented),
-
-  MSE(
-      false,
-      operands -> MeanSquareError.mse(operands[0], operands[1]),
-      operands -> MeanSquareError.shape(operands[0], operands[1]),
-      (grad, operands) -> MeanSquareError.chain(grad, operands[0], operands[1]));
+  ;
 
   private final boolean broadcastSupported;
 

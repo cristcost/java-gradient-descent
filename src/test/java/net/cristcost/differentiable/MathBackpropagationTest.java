@@ -181,43 +181,42 @@ class MathLibraryBackpropagationTest {
 
     VariableTensor x1 = vector(1).variable().withData(2.0);
     ComputedTensor y1 = softmax(x1);
-    assertTensorsEquals(scalar(0.0), y1);
+    assertTensorsEquals(vector(1.0), y1);
     y1.startBackpropagation();
     assertArrayEquals(data(0.0), x1.getGradient());
 
-    VariableTensor x2 = vector(1).variable().withData(5.0);
-    ComputedTensor y2 = mse(x2, vector(2.0));
-    assertTensorsEquals(scalar(3.0 * 3.0), y2);
-    y2.startBackpropagation();
-    assertArrayEquals(data(6.0), x2.getGradient());
+    VariableTensor x2 = vector(3).variable().withData(5.0, 4.0, 3.0);
+    ComputedTensor y2 = softmax(x2);
+    assertTensorsEquals(vector(0.6652, 0.2447, 0.0900), y2);
+    y2.backpropagate(data(1.0, 1.0, 1.0));
+    assertArrayEquals(data(0.0, 0.0, 0.0), x2.getGradient());
 
-    VariableTensor x3 = vector(1).variable().withData(5.0);
-    ComputedTensor y3 = mse(vector(2.0), x3);
-    assertTensorsEquals(scalar(-3.0 * -3.0), y3);
-    y3.startBackpropagation();
-    assertArrayEquals(data(6.0), x3.getGradient());
 
-    VariableTensor x4 = vector(3).variable().withData(3.0, 4.0, 5.0);
-    ComputedTensor y4 = mse(x4, vector(2.0, 4.0, 5.5));
-    assertTensorsEquals(scalar(0.4167), y4);
-    y4.startBackpropagation();
-    assertArrayEquals(data(0.6667, 0.0, -0.3333), x4.getGradient(), 0.0001);
+    VariableTensor x3 = vector(3).variable().withData(0.0, Math.log(2.0), 0.0);
+    ComputedTensor y3 = softmax(x3);
+    assertTensorsEquals(vector(0.25, 0.5, 0.25), y3);
+    y3.backpropagate(data(1.0, 1.0, 1.0));
+    assertArrayEquals(data(0.0, 0.0, 0.0), x3.getGradient());
 
-    VariableTensor x51 = vector(3).variable().withData(3.0, 4.0, 5.0);
-    VariableTensor x52 = vector(3).variable().withData(2.0, 4.0, 5.5);
-    ComputedTensor y5 = mse(x51, x52);
-    assertTensorsEquals(scalar(0.4167), y5);
-    y5.startBackpropagation();
-    assertArrayEquals(data(0.6667, 0.0, -0.3333), x51.getGradient(), 0.0001);
-    assertArrayEquals(data(-0.6667, 0.0, 0.3333), x52.getGradient(), 0.0001);
+    VariableTensor x4 = vector(3).variable().withData(0.0, Math.log(2.0), 0.0);
+    ComputedTensor y4 = softmax(x4);
+    assertTensorsEquals(vector(0.25, 0.5, 0.25), y4);
+    y4.backpropagate(data(1.0, 2.0, 1.0));
+    assertArrayEquals(data(-0.125, 0.25, -0.125), x4.getGradient());
 
-    VariableTensor x61 = matrix(2, 3).variable().withData(1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
-    VariableTensor x62 = matrix(2, 3).variable().withData(1.1, 1.9, 3.0, 4.2, 5.0, 5.5);
-    ComputedTensor y6 = mse(x51, x52);
-    assertTensorsEquals(scalar(0.0517), y6);
-    y6.startBackpropagation();
-    assertArrayEquals(data(-0.0333, 0.0333, 0.0, -0.0667, 0.0, 0.1667), x61.getGradient(), 0.0001);
-    assertArrayEquals(data(0.0333, -0.0333, 0.0, 0.0667, 0.0, -0.1667), x62.getGradient(), 0.0001);
+    VariableTensor x5 =
+        vector(4).variable().withData(Math.log(4.0), Math.log(3.0), Math.log(2.0), Math.log(1.0));
+    ComputedTensor y5 = softmax(x5);
+    assertTensorsEquals(vector(0.4, 0.3, 0.2, 0.1), y5);
+    y5.backpropagate(data(1.0, 1.0, 1.0, 1.0));
+    assertArrayEquals(data(0.0, 0.0, 0.0, 0.0), x5.getGradient());
+
+    VariableTensor x6 =
+        vector(4).variable().withData(Math.log(4.0), Math.log(3.0), Math.log(2.0), Math.log(1.0));
+    ComputedTensor y6 = softmax(x6);
+    assertTensorsEquals(vector(0.4, 0.3, 0.2, 0.1), y6);
+    y6.backpropagate(data(1.0, 1.0, 1.0, 10.0));
+    assertArrayEquals(data(-0.3600, -0.2700, -0.1800, 0.8100), x6.getGradient());
 
   }
 
