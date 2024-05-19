@@ -41,10 +41,6 @@ public class MathLibrary {
     return Operation.MATMUL.compute(input, other);
   }
 
-  public static ComputedTensor matmulNdim(Tensor input, Tensor other) {
-    return Operation.MATMUL_NDIM.compute(input, other);
-  }
-
   private static Tensor broadCast(int[] shape, Tensor operand) {
     if (!Arrays.equals(shape, operand.getShape()) && operand instanceof Broadcastable) {
       return ((Broadcastable) operand).broadcast(shape);
