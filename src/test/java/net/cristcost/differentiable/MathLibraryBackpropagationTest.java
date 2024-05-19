@@ -140,6 +140,13 @@ class MathLibraryBackpropagationTest {
     assertTensorsEquals(scalar(9.0 + 16.0 + 25.0), y3);
     y3.startBackpropagation();
     assertArrayEquals(data(6.0, 8.0, 10.0), x3.getGradient());
+
+
+    VariableTensor x4 = vector(3).variable().withData(3.0, 4.0, 5.0);
+    ComputedTensor y4 = dot(x2, eye(3));
+    assertTensorsEquals(vector(3.0, 4.0, 5.0), y4);
+    y4.startBackpropagation();
+    // assertArrayEquals(data(2.0, 0.5, -1.0), x3.getGradient());
   }
 
   @Test
@@ -323,8 +330,8 @@ class MathLibraryBackpropagationTest {
     assertTensorsEquals(
         matrix(3, 3).withData(-14.0, 101.0, -19.0, 25.0, 185.0, -71.0, 55.0, -20.0, -67.0), y7);
     y7.backpropagate(matrix(3, 3).ones().getData());
-    System.out.println(Arrays.toString(x71.getGradient()));
-    System.out.println(Arrays.toString(x72.getGradient()));
+//    System.out.println(Arrays.toString(x71.getGradient()));
+//    System.out.println(Arrays.toString(x72.getGradient()));
     assertArrayEquals(data(-7.0, -15.0, 12.0, 4.0, -7.0, -15.0, 12.0, 4.0, -7.0, -15.0, 12.0, 4.0),
         x71.getGradient());
     assertArrayEquals(data(2.0, 2.0, 2.0, -11.0, -11.0, -11.0, 8.0, 8.0, 8.0, -18.0, -18.0, -18.0),
@@ -337,8 +344,8 @@ class MathLibraryBackpropagationTest {
     assertTensorsEquals(
         matrix(5, 2).withData(102.0, 56.0, 8.0, 38.0, -76.0, 77.0, -142.0, 31.0, 70.0, 60.0), y8);
     y8.backpropagate(matrix(5, 2).ones().getData());
-    System.out.println(Arrays.toString(x81.getGradient()));
-    System.out.println(Arrays.toString(x82.getGradient()));
+//    System.out.println(Arrays.toString(x81.getGradient()));
+//    System.out.println(Arrays.toString(x82.getGradient()));
     assertArrayEquals(
         data(2.0, 4.0, 15.0, 2.0, 4.0, 15.0, 2.0, 4.0, 15.0, 2.0, 4.0, 15.0, 2.0, 4.0, 15.0),
         x81.getGradient());
@@ -350,8 +357,8 @@ class MathLibraryBackpropagationTest {
     ComputedTensor y9 = matmul(x91, x92);
     assertTensorsEquals(matrix(5, 1).withData(60.0, 26.0, 19.0, 90.0, 136.0), y9);
     y9.backpropagate(matrix(5, 1).ones().getData());
-    System.out.println(Arrays.toString(x91.getGradient()));
-    System.out.println(Arrays.toString(x92.getGradient()));
+//    System.out.println(Arrays.toString(x91.getGradient()));
+//    System.out.println(Arrays.toString(x92.getGradient()));
     assertArrayEquals(data(1.0, 7.0, 0.0, 9.0, 1.0, 7.0, 0.0, 9.0, 1.0, 7.0, 0.0, 9.0, 1.0, 7.0,
         0.0, 9.0, 1.0, 7.0, 0.0, 9.0), x91.getGradient());
     assertArrayEquals(data(1.0, 24.0, 8.0, 18.0), x92.getGradient());
