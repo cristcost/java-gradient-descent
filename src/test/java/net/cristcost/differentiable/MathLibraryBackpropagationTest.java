@@ -2,8 +2,7 @@ package net.cristcost.differentiable;
 
 import static net.cristcost.differentiable.MathLibrary.*;
 import static net.cristcost.differentiable.TensorAsserts.assertTensorsEquals;
-import static org.junit.jupiter.api.Assertions.*;
-import java.util.Arrays;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 
@@ -141,12 +140,6 @@ class MathLibraryBackpropagationTest {
     y3.startBackpropagation();
     assertArrayEquals(data(6.0, 8.0, 10.0), x3.getGradient());
 
-
-    VariableTensor x4 = vector(3).variable().withData(3.0, 4.0, 5.0);
-    ComputedTensor y4 = dot(x2, eye(3));
-    assertTensorsEquals(vector(3.0, 4.0, 5.0), y4);
-    y4.startBackpropagation();
-    // assertArrayEquals(data(2.0, 0.5, -1.0), x3.getGradient());
   }
 
   @Test
