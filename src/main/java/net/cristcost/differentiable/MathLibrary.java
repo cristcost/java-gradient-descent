@@ -41,7 +41,6 @@ public class MathLibrary {
     return Operation.MATMUL.compute(input, other);
   }
 
-  private static Tensor broadCast(int[] shape, Tensor operand) {
   // Don't like it here, should really be in the tensor only
   public static Tensor broadCast(int[] shape, Tensor operand) {
     if (!Arrays.equals(shape, operand.getShape()) && operand instanceof Broadcastable) {

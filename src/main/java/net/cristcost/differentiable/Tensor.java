@@ -30,12 +30,16 @@ public interface Tensor {
   }
 
   default String json() {
+    return json(-1);
+  }
+
+  default String json(int decimals) {
     StringBuilder builder = new StringBuilder();
     if (getShape().length == 0) {
       // Scalar with no shape
       builder.append(getData()[0]);
     } else {
-      formatArray(builder, 0, getData().length, 0);
+      formatArray(decimals, builder, 0, getData().length, 0);
     }
     return builder.toString();
   }
@@ -92,14 +96,15 @@ public interface Tensor {
   }
 
 
-  private void formatArray(StringBuilder builder, int index, int size, int level) {
+  private void formatArray(int decimals, StringBuilder builder, int index, int size, int level) {
     if (getShape().length - level == 1) {
       builder.append("[");
       for (int i = index; i < size; i++) {
         if (i > index) {
           builder.append(", ");
         }
-        builder.append(getData()[i]);
+        builder.append(
+            decimals >= 0 ? String.format("%." + decimals + "f", getData()[i]) : getData()[i]);
       }
       builder.append("]");
     } else {
@@ -113,7 +118,7 @@ public interface Tensor {
         if (i > 0) {
           builder.append(", ");
         }
-        formatArray(builder, index, index + stride, level + 1);
+        formatArray(decimals, builder, index, index + stride, level + 1);
         index += stride;
       }
       builder.append("]");

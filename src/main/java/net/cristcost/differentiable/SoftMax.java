@@ -21,6 +21,7 @@ class SoftMax {
     for (int i = 0; i < a.size(); i++) {
       result[i] /= sum;
     }
+
     return result;
   }
 
@@ -48,8 +49,14 @@ class SoftMax {
       double[] innerGradient = new double[tensor.size()];
       double sum = 0.0;
 
+      // this is avoid Numerical instability large exponent numbers, we shift the values used for
+      // computation by the max. We can do that as Softmax function is invariant to translation by a
+      // constant AND chain rule is based on the softmax
+      double numericalInstabilityCorrection =
+          Arrays.stream(tensor.getData()).max().orElse(Double.NEGATIVE_INFINITY);
+
       for (int i = 0; i < tensor.size(); i++) {
-        softmax[i] = Math.exp(tensor.get(i));
+        softmax[i] = Math.exp(tensor.get(i) - numericalInstabilityCorrection);
         sum += softmax[i];
       }
 

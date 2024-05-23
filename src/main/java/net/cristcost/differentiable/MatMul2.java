@@ -43,7 +43,9 @@ class MatMul2 {
 
     if (tensor.getShape()[1] != other.getShape()[0]) {
       throw new IllegalArgumentException(
-          "Matrix dimensions are not compatible for multiplication.");
+          String.format("Matrix dimensions are not compatible for multiplication: %s vs %s",
+              Arrays.toString(tensor.getShape()),
+              Arrays.toString(other.getShape())));
     }
   }
 
