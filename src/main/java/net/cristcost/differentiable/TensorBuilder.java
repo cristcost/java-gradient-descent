@@ -101,6 +101,6 @@ public class TensorBuilder<T extends Tensor> {
   }
 
   public T uniform(double minval, double maxval) {
-    return rand(() -> RandomGenerator.getDefault().nextDouble(minval, minval));
+    return rand(() -> RandomGenerator.getDefault().nextDouble(minval, maxval));
   }
 }

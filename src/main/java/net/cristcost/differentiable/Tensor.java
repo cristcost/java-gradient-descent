@@ -63,6 +63,10 @@ public interface Tensor {
   }
 
   private int calculateIndex(int[] indices) {
+    return calculateIndex(getShape(), indices);
+  }
+
+  static int calculateIndex(int[] shape, int[] indices) {
     int indicesNdim = indices.length;
     if (indicesNdim == 0) {
       return 0;
@@ -70,7 +74,7 @@ public interface Tensor {
       return indices[0];
     } else {
 
-      int tensorNdim = getShape().length;
+      int tensorNdim = shape.length;
 
       if (indicesNdim > tensorNdim) {
         throw new IllegalArgumentException("Number of indices does not match array dimension.");
@@ -80,7 +84,7 @@ public interface Tensor {
         for (int i = tensorNdim - 1; i >= (tensorNdim - indicesNdim); i--) {
           // shift the requested indices to the right by subtracting (tensorNdim - indicesNdim)
           index += indices[i - tensorNdim + indicesNdim] * multiplier;
-          multiplier *= getShape()[i];
+          multiplier *= shape[i];
         }
         return index;
       }

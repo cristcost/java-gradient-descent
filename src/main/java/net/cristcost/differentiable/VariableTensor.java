@@ -12,7 +12,18 @@ public class VariableTensor implements Tensor, Differentiable {
 
   @Getter
   private final double[] gradient;
-
+  
+  void set(double value, int... indices) {
+    int index = Tensor.calculateIndex(shape, indices);
+    if (index >= size()) {
+      throw new ArrayIndexOutOfBoundsException(
+          String.format(
+              "Requested index is beyond the size of the tensor data: result index %d >= size %d",
+              index, size()));
+    }
+    data[index % data.length] = value;
+  }
+  
   @Override
   public String toString() {
     return this.json();

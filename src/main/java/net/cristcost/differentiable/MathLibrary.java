@@ -42,6 +42,8 @@ public class MathLibrary {
   }
 
   private static Tensor broadCast(int[] shape, Tensor operand) {
+  // Don't like it here, should really be in the tensor only
+  public static Tensor broadCast(int[] shape, Tensor operand) {
     if (!Arrays.equals(shape, operand.getShape()) && operand instanceof Broadcastable) {
       return ((Broadcastable) operand).broadcast(shape);
     } else {
@@ -49,10 +51,39 @@ public class MathLibrary {
     }
   }
 
+  // Don't like it here, should really be in the tensor only
   public static Tensor[] broadCast(int[] shape, Tensor... operands) {
     Tensor[] broadcastOperands = new Tensor[operands.length];
     for (int i = 0; i < operands.length; i++) {
       broadcastOperands[i] = broadCast(shape, operands[i]);
+    }
+    return broadcastOperands;
+  }
+
+  // Don't like it here, should really be in the tensor only
+  public static Tensor unsqueeze(int newDimension, Tensor operand) {
+    if (operand instanceof Broadcastable) {
+      int[] originalShape = operand.getShape();
+      int[] newShape = Arrays.copyOf(originalShape, originalShape.length + 1);
+      if (newDimension < 0) {
+        newDimension += newShape.length;
+      }
+      for (int i = newShape.length - 1; i > newDimension; i--) {
+        newShape[i] = newShape[i - 1];
+      }
+      newShape[newDimension] = 1;
+
+      return ((Broadcastable) operand).broadcast(newShape);
+    } else {
+      return operand;
+    }
+  }
+
+  // Don't like it here, should really be in the tensor only
+  public static Tensor[] unsqueeze(int newDimension, Tensor... operands) {
+    Tensor[] broadcastOperands = new Tensor[operands.length];
+    for (int i = 0; i < operands.length; i++) {
+      broadcastOperands[i] = unsqueeze(newDimension, operands[i]);
     }
     return broadcastOperands;
   }
