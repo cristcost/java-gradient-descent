@@ -10,4 +10,92 @@ While the main branch focuses on SGD with scalar values, I'm exploring how to ch
 
 **Current status**: implemented support for Tensor operations and implemented MNIST dataset (handwritten digits) training loop in pure Java.
 
-**Next**: Code in this branch to be refactored and styled for presentation.
+*Note:* The code is learning, as the number of correct predictions improves over each epoch and beat the random accuracy of 10% (* running on the training dataset, did not check yet if it overfit). However the performance is inferior to the equivalent PyTorch code, which achieve 87% accuracy in less than 7 epochs. Either PyTorch has additional optimizations I've not implemented, or there is something wrong in my implementation. The CrossEntropy loss value in my code is 1 order of magnitude bigger than in pytorch and that's a clue to dive deep (could pytorch be performing some normalization?).
+
+Pytorch code I'm comparing to:
+
+```
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+import torchvision
+import torchvision.transforms as transforms
+from torch.utils.data import DataLoader
+import time
+
+class HandwrittenDigitParserModel(nn.Module):
+    def __init__(self):
+        super(HandwrittenDigitParserModel, self).__init__()
+        self.fc1 = nn.Linear(28 * 28, 128)
+        self.fc2 = nn.Linear(128, 64)
+        self.fc3 = nn.Linear(64, 10)
+
+    def forward(self, x):
+        x = x.view(-1, 28 * 28)  # Flatten the input
+        x = torch.relu(self.fc1(x))
+        x = torch.relu(self.fc2(x))
+        x = self.fc3(x)
+        return x
+
+
+# Load the MNIST dataset
+transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
+
+train_dataset = torchvision.datasets.MNIST(root="./data", train=True, download=True, transform=transform)
+train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
+samples_count = list(train_dataset.targets.size())[0]
+tot_rounds_per_epoch = int(samples_count/64)
+
+handwrittenDigitParserModel = HandwrittenDigitParserModel()
+
+optimizer = optim.SGD(handwrittenDigitParserModel.parameters(), lr=0.01, momentum=0.9)
+
+# Training loop
+num_epochs = 25
+start_time = time.time()
+
+for epoch in range(num_epochs):
+    epoch_loss = 0.0
+    epoch_correct = 0
+    epoch_samples = 0
+          
+    print("")
+    print("### Epoch ", epoch, " ####")
+    for round, (inputs, labels) in enumerate(train_loader):
+        optimizer.zero_grad()
+
+        outputs = handwrittenDigitParserModel(inputs)
+
+        true_labels_one_hot = F.one_hot(labels, num_classes=10).float()
+
+        probabilities = F.softmax(outputs, dim=1)
+
+        loss = F.cross_entropy(probabilities, true_labels_one_hot)
+
+        loss.backward()
+        optimizer.step()
+
+        predicted = torch.argmax(outputs, dim=1)
+        correct = (predicted == labels).sum().item()
+
+        epoch_correct += correct
+        epoch_samples += labels.size(0)
+        epoch_loss += loss.item()
+
+        if round == 10 or round == 50 or round == 100 or round == 500 or round == tot_rounds_per_epoch-1:
+            print("   === Epoch ", epoch, " round", round, "===")
+            print(f"         Execution time: {int(time.time() - start_time)} seconds")
+            print("             Loss value: ", loss.item())
+            print("    Correct predictions: ", correct, " out of ", labels.size(0))
+    print("         Epoch Loss value: ", epoch_loss/tot_rounds_per_epoch)
+    print("Epoch Correct predictions: ", epoch_correct, " out of ", epoch_samples)
+    if(epoch_correct / epoch_samples > 0.86):
+        break
+
+print("Finished Training")
+```
+
+**Next**: 
+* Code in this branch to be refactored and styled for presentation.
+* Add additional unit tests on the operations to compare outout with Tensorflow and PyTorch
