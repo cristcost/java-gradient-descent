@@ -33,6 +33,11 @@ public class MathLibrary {
     return Operation.MSE.compute(a, b);
   }
 
+  public static ComputedTensor categoricalCrossentropy(Tensor predictions,
+      Tensor oneHotEncodedLabels) {
+    return Operation.CATEGORICAL_CROSSENTROPY.compute(predictions, oneHotEncodedLabels);
+  }
+
   public static ComputedTensor softmax(Tensor operand) {
     return Operation.SOFTMAX.compute(operand);
   }
@@ -148,5 +153,6 @@ public class MathLibrary {
   public static TensorBuilder<ConstantTensor> like(Tensor ref) {
     return TensorBuilder.builder(ref.getShape());
   }
+
 
 }

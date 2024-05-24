@@ -9,9 +9,19 @@ import java.util.random.RandomGenerator;
 
 public class TensorBuilder<T extends Tensor> {
 
-  private final int[] shape;
+  public static TensorBuilder<ConstantTensor> builder(int[] shape) {
+    return new TensorBuilder<>(ConstantTensor.class, shape, (d, s) -> new ConstantTensor(d, s));
+  }
+
+  private static int shapeSize(int[] s) {
+    return Arrays.stream(s).reduce(1, (a, b) -> a * b);
+  }
 
   private final BiFunction<double[], int[], T> buildFunction;
+
+  private Optimizer optimizer;
+
+  private final int[] shape;
 
   private final Class<T> tensorType;
 
@@ -24,32 +34,50 @@ public class TensorBuilder<T extends Tensor> {
     this.buildFunction = buildFunction;
   }
 
-  public T withData(double... data) {
-    return buildFunction.apply(data, shape);
-  }
-
-  public T withData(BiFunction<Integer, Integer, Double> dataSupplier) {
-    return withData((i) -> dataSupplier.apply(i[0], i[1]));
-  }
-
-  public T withData(Function<int[], Double> dataSupplier) {
-    double[] data = new double[shapeSize()];
-
-    int[] ii = new int[shape.length];
-    for (int i = 0; i < data.length; i++) {
-      data[i] = dataSupplier.apply(ii);
-
-      // increment indices
-      Tensor.incrementIndices(ii, shape);
+  public T clone(Tensor tensor) {
+    if (shapeSize(shape) != shapeSize(tensor.getShape())) {
+      throw new RuntimeException(
+          String.format("Clone tensor failed, tensor shape %s incompatible with builder shape s",
+              Arrays.toString(tensor.getShape()),
+              Arrays.toString(shape)));
     }
 
-    return buildFunction.apply(data, shape);
+    return withData(tensor.getData().clone());
   }
 
-  public static TensorBuilder<ConstantTensor> builder(int[] shape) {
-    return new TensorBuilder<>(ConstantTensor.class, shape, (d, s) -> new ConstantTensor(d, s));
+  public T normal(double mean, double standarDeviation) {
+    return rand(() -> RandomGenerator.getDefault().nextGaussian(mean, standarDeviation));
   }
 
+  public T ones() {
+    int size = shapeSize(shape);
+    double[] data = new double[size];
+    Arrays.fill(data, 1.0);
+    return withData(data);
+  }
+
+  public T rand(Supplier<Double> randomFunction) {
+    int size = shapeSize(shape);
+    double[] data = new double[size];
+    for (int i = 0; i < size; i++) {
+      data[i] = randomFunction.get();
+    }
+    return withData(data);
+  }
+
+  
+  public T repeat(double value) {
+    int size = shapeSize(shape);
+    double[] data = new double[size];
+    Arrays.fill(data, value);
+    return withData(data);
+  }
+
+  public T uniform(double minval, double maxval) {
+    return rand(() -> RandomGenerator.getDefault().nextDouble(minval, maxval));
+  }
+
+  @SuppressWarnings("unchecked")
   public TensorBuilder<VariableTensor> variable() {
     if (tensorType == VariableTensor.class) {
       // Reuse himself if by chance this is called twice
@@ -62,45 +90,37 @@ public class TensorBuilder<T extends Tensor> {
     return variableTensorBuilder;
   }
 
-  public T repeat(double value) {
-    int size = shapeSize();
-    double[] data = new double[size];
-    Arrays.fill(data, value);
-    return withData(data);
+  public T withData(BiFunction<Integer, Integer, Double> dataSupplier) {
+    return withData((i) -> dataSupplier.apply(i[0], i[1]));
+  }
+
+  public T withData(double... data) {
+    return buildFunction.apply(data, shape);
+  }
+
+  public T withData(Function<int[], Double> dataSupplier) {
+    double[] data = new double[shapeSize(shape)];
+
+    int[] ii = new int[shape.length];
+    for (int i = 0; i < data.length; i++) {
+      data[i] = dataSupplier.apply(ii);
+
+      // increment indices
+      Tensor.incrementIndices(ii, shape);
+    }
+
+    return buildFunction.apply(data, shape);
   }
 
   public T zeros() {
-    int size = shapeSize();
+    int size = shapeSize(shape);
     double[] data = new double[size];
     Arrays.fill(data, 0.0);
     return withData(data);
   }
 
-  public T ones() {
-    int size = shapeSize();
-    double[] data = new double[size];
-    Arrays.fill(data, 1.0);
-    return withData(data);
-  }
-
-  public T rand(Supplier<Double> randomFunction) {
-    int size = shapeSize();
-    double[] data = new double[size];
-    for (int i = 0; i < size; i++) {
-      data[i] = randomFunction.get();
-    }
-    return withData(data);
-  }
-
-  private int shapeSize() {
-    return Arrays.stream(shape).reduce(1, (a, b) -> a * b);
-  }
-
-  public T normal(double mean, double standarDeviation) {
-    return rand(() -> RandomGenerator.getDefault().nextGaussian(mean, standarDeviation));
-  }
-
-  public T uniform(double minval, double maxval) {
-    return rand(() -> RandomGenerator.getDefault().nextDouble(minval, maxval));
+  TensorBuilder<T> withOptimizer(Optimizer optimizer) {
+    this.optimizer = optimizer;
+    return this;
   }
 }

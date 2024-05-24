@@ -43,6 +43,12 @@ enum Operation {
       operands -> MeanSquareError.shape(operands[0], operands[1]),
       (grad, operands) -> MeanSquareError.chain(grad, operands[0], operands[1])),
 
+  CATEGORICAL_CROSSENTROPY(
+      false,
+      operands -> CategoricalCrossentropy.cce(operands[0], operands[1]),
+      operands -> CategoricalCrossentropy.shape(operands[0], operands[1]),
+      (grad, operands) -> CategoricalCrossentropy.chain(grad, operands[0], operands[1])),
+
   SOFTMAX(
       false,
       operands -> SoftMax.softmax(operands[0]),

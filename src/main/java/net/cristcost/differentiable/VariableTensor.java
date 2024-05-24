@@ -1,6 +1,8 @@
 package net.cristcost.differentiable;
 
+import java.util.Arrays;
 import lombok.Getter;
+import lombok.Setter;
 
 public class VariableTensor implements Tensor, Differentiable {
 
@@ -12,7 +14,10 @@ public class VariableTensor implements Tensor, Differentiable {
 
   @Getter
   private final double[] gradient;
-  
+
+  @Setter
+  private Optimizer optimizer;
+
   void set(double value, int... indices) {
     int index = Tensor.calculateIndex(shape, indices);
     if (index >= size()) {
@@ -23,7 +28,7 @@ public class VariableTensor implements Tensor, Differentiable {
     }
     data[index % data.length] = value;
   }
-  
+
   @Override
   public String toString() {
     return this.json();
@@ -40,6 +45,14 @@ public class VariableTensor implements Tensor, Differentiable {
     for (int i = 0; i < outerGradient.length; i++) {
       this.gradient[i] += outerGradient[i];
     }
+  }
+
+  public void optimize() {
+    if (optimizer == null) {
+      throw new RuntimeException("Missing optimizer: Cannot optimize tensor");
+    }
+    optimizer.optimize(data, gradient);
+    Arrays.fill(gradient, 0.0);
   }
 
 }

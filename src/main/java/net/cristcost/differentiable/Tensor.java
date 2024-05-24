@@ -15,44 +15,7 @@ import java.util.function.Function;
  */
 public interface Tensor {
 
-  double[] getData();
-
-  int[] getShape();
-
-  default int size() {
-    return getData().length;
-  }
-
-  default double get(int... indices) {
-    int index = calculateIndex(indices);
-    if (index >= size()) {
-      throw new ArrayIndexOutOfBoundsException(
-          String.format(
-              "Requested index is beyond the size of the tensor data: result index %d >= size %d",
-              index, size()));
-    }
-    return getData()[index % getData().length];
-  }
-
-  default String json() {
-    return json(-1);
-  }
-
-  default void toFile(Path file) throws IOException {
-    try (DataOutputStream dos = new DataOutputStream(Files.newOutputStream(file))) {
-      dos.writeInt(getShape().length);
-      dos.writeInt(getData().length);
-      for (int i : getShape()) {
-        dos.writeInt(i);
-      }
-
-      for (double d : getData()) {
-        dos.writeDouble(d);
-      }
-    }
-  }
-
-  default Tensor fromFile(Path file) throws IOException {
+  public static Tensor fromFile(Path file) throws IOException {
 
     try (DataInputStream dis = new DataInputStream(Files.newInputStream(file))) {
       int shapeSize = dis.readInt();
@@ -70,35 +33,15 @@ public interface Tensor {
 
       return new Tensor() {
         @Override
-        public int[] getShape() {
-          return shape;
-        }
-
-        @Override
         public double[] getData() {
           return data;
         }
+
+        @Override
+        public int[] getShape() {
+          return shape;
+        }
       };
-    }
-  }
-
-  default String json(int decimals) {
-    StringBuilder builder = new StringBuilder();
-    if (getShape().length == 0) {
-      // Scalar with no shape
-      builder.append(getData()[0]);
-    } else {
-      formatArray(decimals, builder, 0, getData().length, 0);
-    }
-    return builder.toString();
-  }
-
-  default <T> Optional<T> broadcastable(Function<Broadcastable, T> function) {
-    if (this instanceof Broadcastable) {
-      Broadcastable broadcastable = (Broadcastable) this;
-      return Optional.of(function.apply(broadcastable));
-    } else {
-      return Optional.empty();
     }
   }
 
@@ -113,10 +56,6 @@ public interface Tensor {
       }
       indices[cursor]++;
     }
-  }
-
-  private int calculateIndex(int[] indices) {
-    return calculateIndex(getShape(), indices);
   }
 
   static int calculateIndex(int[] shape, int[] indices) {
@@ -142,6 +81,67 @@ public interface Tensor {
         return index;
       }
     }
+  }
+
+  default <T> Optional<T> broadcastable(Function<Broadcastable, T> function) {
+    if (this instanceof Broadcastable) {
+      Broadcastable broadcastable = (Broadcastable) this;
+      return Optional.of(function.apply(broadcastable));
+    } else {
+      return Optional.empty();
+    }
+  }
+
+  default double get(int... indices) {
+    int index = calculateIndex(indices);
+    if (index >= size()) {
+      throw new ArrayIndexOutOfBoundsException(
+          String.format(
+              "Requested index is beyond the size of the tensor data: result index %d >= size %d",
+              index, size()));
+    }
+    return getData()[index % getData().length];
+  }
+
+  double[] getData();
+
+  int[] getShape();
+
+  default String json() {
+    return json(-1);
+  }
+
+  default String json(int decimals) {
+    StringBuilder builder = new StringBuilder();
+    if (getShape().length == 0) {
+      // Scalar with no shape
+      builder.append(getData()[0]);
+    } else {
+      formatArray(decimals, builder, 0, getData().length, 0);
+    }
+    return builder.toString();
+  }
+
+  default int size() {
+    return getData().length;
+  }
+
+  default void toFile(Path file) throws IOException {
+    try (DataOutputStream dos = new DataOutputStream(Files.newOutputStream(file))) {
+      dos.writeInt(getShape().length);
+      dos.writeInt(getData().length);
+      for (int i : getShape()) {
+        dos.writeInt(i);
+      }
+
+      for (double d : getData()) {
+        dos.writeDouble(d);
+      }
+    }
+  }
+
+  private int calculateIndex(int[] indices) {
+    return calculateIndex(getShape(), indices);
   }
 
 

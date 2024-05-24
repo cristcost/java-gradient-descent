@@ -5,17 +5,18 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import net.cristcost.differentiable.ComputationGraphStats;
 import net.cristcost.differentiable.ComputedTensor;
 import net.cristcost.differentiable.ConstantTensor;
+import net.cristcost.differentiable.RootMeanSquarePropagationOptimizer;
+import net.cristcost.differentiable.SgdWithMomentumOptimizer;
 import net.cristcost.differentiable.Tensor;
 import net.cristcost.differentiable.VariableTensor;
 
 public class Mnist {
-
-  private static final double LEARNING_RATE = 0.05;
 
   public static void main(String[] args) throws IOException {
 
@@ -39,20 +40,57 @@ public class Mnist {
     int sampleIndex = 0;
     int trainDatasetSize = trainDataset.size();
 
-    // y = a * x + b
-    VariableTensor layer1Weights = matrix(28 * 28, 128).variable().normal(0.0, 1.0);
-    VariableTensor layer1Bias = vector(128).variable().normal(0.0, 1.0);
-    VariableTensor layer2Weights = matrix(128, 64).variable().normal(0.0, 1.0);
-    VariableTensor layer2Bias = vector(64).variable().normal(0.0, 1.0);
-    VariableTensor layer3Weights = matrix(64, 10).variable().normal(0.0, 1.0);
-    VariableTensor layer3Bias = vector(10).variable().normal(0.0, 1.0);
+    boolean load = Arrays.stream(args).filter(arg -> arg.equals("--load")).findAny().isPresent();
+
+    final VariableTensor layer1Weights =
+        load ? matrix(28 * 28, 128).variable()
+            .clone(Tensor.fromFile(Path.of("save/layer1Weights.tensor")))
+            : matrix(28 * 28, 128).variable().normal(0.0, 1.0);
+    final VariableTensor layer1Bias =
+        load ? vector(128).variable().clone(Tensor.fromFile(Path.of("save/layer1Bias.tensor")))
+            : vector(128).variable().normal(0.0, 1.0);
+    final VariableTensor layer2Weights =
+        load ? matrix(128, 64).variable()
+            .clone(Tensor.fromFile(Path.of("save/layer2Weights.tensor")))
+            : matrix(128, 64).variable().normal(0.0, 1.0);
+    final VariableTensor layer2Bias =
+        load ? vector(64).variable().clone(Tensor.fromFile(Path.of("save/layer2Bias.tensor")))
+            : vector(64).variable().normal(0.0, 1.0);
+    final VariableTensor layer3Weights =
+        load ? matrix(64, 10).variable()
+            .clone(Tensor.fromFile(Path.of("save/layer3Weights.tensor")))
+            : matrix(64, 10).variable().normal(0.0, 1.0);
+    final VariableTensor layer3Bias =
+        load ? vector(10).variable().clone(Tensor.fromFile(Path.of("save/layer3Bias.tensor")))
+            : vector(10).variable().normal(0.0, 1.0);
+
+    layer1Weights.setOptimizer(new SgdWithMomentumOptimizer(0.01, 0.9));
+    layer1Bias.setOptimizer(new SgdWithMomentumOptimizer(0.01, 0.9));
+    layer2Weights.setOptimizer(new SgdWithMomentumOptimizer(0.01, 0.9));
+    layer2Bias.setOptimizer(new SgdWithMomentumOptimizer(0.01, 0.9));
+    layer3Weights.setOptimizer(new SgdWithMomentumOptimizer(0.01, 0.9));
+    layer3Bias.setOptimizer(new SgdWithMomentumOptimizer(0.01, 0.9));
+    // layer1Weights.setOptimizer(new RootMeanSquarePropagationOptimizer(0.01, 0.9));
+    // layer1Bias.setOptimizer(new RootMeanSquarePropagationOptimizer(0.01, 0.9));
+    // layer2Weights.setOptimizer(new RootMeanSquarePropagationOptimizer(0.01, 0.9));
+    // layer2Bias.setOptimizer(new RootMeanSquarePropagationOptimizer(0.01, 0.9));
+    // layer3Weights.setOptimizer(new RootMeanSquarePropagationOptimizer(0.01, 0.9));
+    // layer3Bias.setOptimizer(new RootMeanSquarePropagationOptimizer(0.01, 0.9));
 
     double minLoss = Double.MAX_VALUE;
 
 
     long initTime = System.currentTimeMillis();
+    long partialTime = System.currentTimeMillis();
+
     for (int epoch = 0; epoch < epochs; epoch++) {
-      double averageLoss = 0.0;
+      double epochLoss = 0.0;
+      int epochCorrect = 0;
+      int epochSamples = 0;
+
+      System.out.println();
+      System.out.println("### Epoch " + epoch + " ####");
+
       for (int round = 0; round < trainDatasetSize / batchSize; round++) {
 
         List<ComputedTensor> partialLosses = new ArrayList<>();
@@ -63,81 +101,91 @@ public class Mnist {
           Sample sample = trainDataset.get((sampleIndex++) % trainDataset.size());
 
           Tensor input = unsqueeze(0, sample.getTensor());
-          ConstantTensor target = vector(10).withData(makeCategoryData(sample.getLabel()));
+          ConstantTensor oneHotEncodedLabel =
+              vector(10).withData(makeOneHotEncodedData(sample.getLabel()));
 
           ComputedTensor layer1Out = relu(sum(matmul(input, layer1Weights), layer1Bias));
           ComputedTensor layer2Out = relu(sum(matmul(layer1Out, layer2Weights), layer2Bias));
           ComputedTensor prediction = softmax(sum(matmul(layer2Out, layer3Weights), layer3Bias));
 
-          ComputedTensor partialMseLoss = mse(target, prediction);
+          ComputedTensor partialCategoricalCrossEntropyLoss =
+              categoricalCrossentropy(prediction, oneHotEncodedLabel);
 
           if (findMaxCategory(prediction.getData()) == sample.getLabel()) {
             correctPredictions++;
+            epochCorrect++;
           }
+          epochSamples++;
 
-          partialLosses.add(partialMseLoss);
+          partialLosses.add(partialCategoricalCrossEntropyLoss);
         }
 
         // Loss is the average of all the partial losses
-        ComputedTensor mseLoss =
+        ComputedTensor categoricalCrossentropyLoss =
             multiply(sum(partialLosses.toArray(Tensor[]::new)), scalar(1.0 / batchSize));
 
-        if (round % 10 == 0) {
+        if (round == 10 || round == 50 || round == 100 || round == 500
+            || round == trainDatasetSize - 1) {
           System.out.println("=== Epoch " + epoch + " Round " + round + "===");
-          System.out.println(System.currentTimeMillis() - initTime);
-          System.out.println(String.format("          Loss value: %f", mseLoss.get(0)));
+          System.out
+              .println("    Elapsed seconds: " + (System.currentTimeMillis() - initTime) / 1000);
+          System.out.println(
+              String.format("          Loss value: %f", categoricalCrossentropyLoss.get(0)));
           System.out.println(
               String.format(" Correct predictions: %d out of %d", correctPredictions, batchSize));
         }
 
-
-        if (mseLoss.get(0) < 0.0000001) {
-
-          System.out.println();
-          System.out.println("=== Converged to solution in " + epoch + " epochs ===");
-
-          System.out.println("## loss function stats: ");
-          ComputationGraphStats.printComputationGraphStats(mseLoss);
-          System.out.println("## computation graph:");
-          ComputationGraphStats.printComputationGraph(mseLoss);
-          break;
+        if (System.currentTimeMillis() - partialTime > 30000) {
+          partialTime += 30000;
+          System.err
+              .println("                   ( " + (System.currentTimeMillis() - initTime) / 1000
+                  + " sec, round " + round + ")");
         }
 
-        averageLoss += mseLoss.get(0) / (trainDatasetSize / batchSize);
+        epochLoss += categoricalCrossentropyLoss.get(0) / (trainDatasetSize / batchSize);
 
-        mseLoss.startBackpropagation();
+        categoricalCrossentropyLoss.startBackpropagation();
 
-        // W -= w.getGradient() * LEARNING_RATE;
-        layer1Weights = matrix(28 * 28, 128).variable()
-            .withData(
-                optimizeData(layer1Weights.getData(), layer1Weights.getGradient(), LEARNING_RATE));
-        layer1Bias = vector(128).variable()
-            .withData(
-                optimizeData(layer1Bias.getData(), layer1Bias.getGradient(), LEARNING_RATE));
-        layer2Weights = matrix(128, 64).variable()
-            .withData(
-                optimizeData(layer2Weights.getData(), layer2Weights.getGradient(), LEARNING_RATE));
-        layer2Bias = vector(64).variable()
-            .withData(
-                optimizeData(layer2Bias.getData(), layer2Bias.getGradient(), LEARNING_RATE));
-        layer3Weights = matrix(64, 10).variable()
-            .withData(
-                optimizeData(layer3Weights.getData(), layer3Weights.getGradient(), LEARNING_RATE));
-        layer3Bias = vector(10).variable()
-            .withData(
-                optimizeData(layer3Bias.getData(), layer3Bias.getGradient(), LEARNING_RATE));
-
+        layer1Weights.optimize();
+        layer1Bias.optimize();
+        layer2Weights.optimize();
+        layer2Bias.optimize();
+        layer3Weights.optimize();
+        layer3Bias.optimize();
       }
 
-      if (averageLoss < minLoss) {
+      // if (categoricalCrossentropyLoss.get(0) < 0.0000001) {
+      //
+      // System.out.println();
+      // System.out.println("=== Converged to solution in " + epoch + " epochs ===");
+      //
+      // System.out.println("## loss function stats: ");
+      // ComputationGraphStats.printComputationGraphStats(categoricalCrossentropyLoss);
+      // System.out.println("## computation graph:");
+      // ComputationGraphStats.printComputationGraph(categoricalCrossentropyLoss);
+      // break;
+      // }
+      if (epochLoss < minLoss) {
         Files.createDirectories(Path.of("save"));
+
+        Files.write(Path.of("save/info.txt"), List.of(
+            "Average loss of dataset: " + epochLoss,
+            "      Samples predicted: " + epochSamples,
+            "    Correct predictions: " + epochCorrect));
+
         layer1Weights.toFile(Path.of("save/layer1Weights.tensor"));
         layer1Bias.toFile(Path.of("save/layer1Bias.tensor"));
         layer2Weights.toFile(Path.of("save/layer2Weights.tensor"));
         layer2Bias.toFile(Path.of("save/layer2Bias.tensor"));
         layer3Weights.toFile(Path.of("save/layer3Weights.tensor"));
         layer3Bias.toFile(Path.of("save/layer3Bias.tensor"));
-        minLoss = averageLoss;
+        minLoss = epochLoss;
+      }
+      System.out.println("         Epoch Loss value: " + epochLoss);
+      System.out.println("Epoch Correct predictions: " + epochCorrect + " out of " + epochSamples);
+
+      if ((double) epochCorrect / epochSamples > 0.86) {
+        break;
       }
     }
   }
@@ -152,22 +200,7 @@ public class Mnist {
     return result;
   }
 
-  private static double[] optimizeData(double[] data, double[] gradient, double learningRate) {
-    double[] result = new double[data.length];
-
-    for (int i = 0; i < data.length; i++) {
-      if (Double.isNaN(gradient[i])) {
-        throw new RuntimeException("gradient has a NaN");
-      }
-      result[i] = data[i] - gradient[i] * learningRate;
-      if (Double.isNaN(result[i])) {
-        throw new RuntimeException("optimizeData resulted in a NaN");
-      }
-    }
-    return result;
-  }
-
-  private static double[] makeCategoryData(int label) {
+  private static double[] makeOneHotEncodedData(int label) {
     double[] ret = new double[10];
     ret[label] = 1.0;
     return ret;
