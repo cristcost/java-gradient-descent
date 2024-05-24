@@ -1,5 +1,10 @@
 package net.cristcost.differentiable;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -31,6 +36,50 @@ public interface Tensor {
 
   default String json() {
     return json(-1);
+  }
+
+  default void toFile(Path file) throws IOException {
+    try (DataOutputStream dos = new DataOutputStream(Files.newOutputStream(file))) {
+      dos.writeInt(getShape().length);
+      dos.writeInt(getData().length);
+      for (int i : getShape()) {
+        dos.writeInt(i);
+      }
+
+      for (double d : getData()) {
+        dos.writeDouble(d);
+      }
+    }
+  }
+
+  default Tensor fromFile(Path file) throws IOException {
+
+    try (DataInputStream dis = new DataInputStream(Files.newInputStream(file))) {
+      int shapeSize = dis.readInt();
+      int dataSize = dis.readInt();
+
+      final int[] shape = new int[shapeSize];
+      for (int i = 0; i < shapeSize; i++) {
+        shape[i] = dis.readInt();
+      }
+
+      final double[] data = new double[dataSize];
+      for (int i = 0; i < dataSize; i++) {
+        data[i] = dis.readDouble();
+      }
+
+      return new Tensor() {
+        @Override
+        public int[] getShape() {
+          return shape;
+        }
+
+        @Override
+        public double[] getData() {
+          return data;
+        }
+      };
+    }
   }
 
   default String json(int decimals) {

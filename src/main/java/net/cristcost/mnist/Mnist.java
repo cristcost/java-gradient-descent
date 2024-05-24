@@ -15,7 +15,7 @@ import net.cristcost.differentiable.VariableTensor;
 
 public class Mnist {
 
-  private static final double LEARNING_RATE = 1;
+  private static final double LEARNING_RATE = 0.05;
 
   public static void main(String[] args) throws IOException {
 
@@ -47,7 +47,12 @@ public class Mnist {
     VariableTensor layer3Weights = matrix(64, 10).variable().normal(0.0, 1.0);
     VariableTensor layer3Bias = vector(10).variable().normal(0.0, 1.0);
 
+    double minLoss = Double.MAX_VALUE;
+
+
+    long initTime = System.currentTimeMillis();
     for (int epoch = 0; epoch < epochs; epoch++) {
+      double averageLoss = 0.0;
       for (int round = 0; round < trainDatasetSize / batchSize; round++) {
 
         List<ComputedTensor> partialLosses = new ArrayList<>();
@@ -79,6 +84,7 @@ public class Mnist {
 
         if (round % 10 == 0) {
           System.out.println("=== Epoch " + epoch + " Round " + round + "===");
+          System.out.println(System.currentTimeMillis() - initTime);
           System.out.println(String.format("          Loss value: %f", mseLoss.get(0)));
           System.out.println(
               String.format(" Correct predictions: %d out of %d", correctPredictions, batchSize));
@@ -96,6 +102,8 @@ public class Mnist {
           ComputationGraphStats.printComputationGraph(mseLoss);
           break;
         }
+
+        averageLoss += mseLoss.get(0) / (trainDatasetSize / batchSize);
 
         mseLoss.startBackpropagation();
 
@@ -115,11 +123,21 @@ public class Mnist {
         layer3Weights = matrix(64, 10).variable()
             .withData(
                 optimizeData(layer3Weights.getData(), layer3Weights.getGradient(), LEARNING_RATE));
-
         layer3Bias = vector(10).variable()
             .withData(
                 optimizeData(layer3Bias.getData(), layer3Bias.getGradient(), LEARNING_RATE));
 
+      }
+
+      if (averageLoss < minLoss) {
+        Files.createDirectories(Path.of("save"));
+        layer1Weights.toFile(Path.of("save/layer1Weights.tensor"));
+        layer1Bias.toFile(Path.of("save/layer1Bias.tensor"));
+        layer2Weights.toFile(Path.of("save/layer2Weights.tensor"));
+        layer2Bias.toFile(Path.of("save/layer2Bias.tensor"));
+        layer3Weights.toFile(Path.of("save/layer3Weights.tensor"));
+        layer3Bias.toFile(Path.of("save/layer3Bias.tensor"));
+        minLoss = averageLoss;
       }
     }
   }
