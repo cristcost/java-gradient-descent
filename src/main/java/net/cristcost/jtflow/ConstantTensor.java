@@ -1,4 +1,4 @@
-package net.cristcost.differentiable;
+package net.cristcost.jtflow;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

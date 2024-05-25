@@ -1,4 +1,4 @@
-package net.cristcost.differentiable;
+package net.cristcost.jtflow;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;

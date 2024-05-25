@@ -1,4 +1,4 @@
-package net.cristcost.differentiable;
+package net.cristcost.jtflow;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

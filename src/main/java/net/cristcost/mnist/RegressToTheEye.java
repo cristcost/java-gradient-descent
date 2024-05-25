@@ -1,11 +1,11 @@
 package net.cristcost.mnist;
 
-import static net.cristcost.differentiable.MathLibrary.*;
+import static net.cristcost.jtflow.MathLibrary.*;
 import java.io.IOException;
-import net.cristcost.differentiable.ComputationGraphStats;
-import net.cristcost.differentiable.ComputedTensor;
-import net.cristcost.differentiable.Tensor;
-import net.cristcost.differentiable.VariableTensor;
+import net.cristcost.jtflow.ComputationGraphStats;
+import net.cristcost.jtflow.ComputedTensor;
+import net.cristcost.jtflow.Tensor;
+import net.cristcost.jtflow.VariableTensor;
 
 public class RegressToTheEye {
 

@@ -1,8 +1,8 @@
 package net.cristcost.verify;
 
-import static net.cristcost.differentiable.MathLibrary.*;
-import net.cristcost.differentiable.ComputationGraphStats;
-import net.cristcost.differentiable.Tensor;
+import static net.cristcost.jtflow.MathLibrary.*;
+import net.cristcost.jtflow.ComputationGraphStats;
+import net.cristcost.jtflow.Tensor;
 
 public class CheckSampleComputationalGraphs {
 

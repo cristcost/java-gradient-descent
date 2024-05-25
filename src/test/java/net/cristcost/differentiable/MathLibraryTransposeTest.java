@@ -2,6 +2,9 @@ package net.cristcost.differentiable;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import net.cristcost.jtflow.ConstantTensor;
+import net.cristcost.jtflow.MathLibrary;
+import net.cristcost.jtflow.Tensor;
 
 public class MathLibraryTransposeTest {
 

@@ -1,6 +1,6 @@
 package net.cristcost.mnist;
 
-import net.cristcost.differentiable.Tensor;
+import net.cristcost.jtflow.Tensor;
 
 
 interface Sample {

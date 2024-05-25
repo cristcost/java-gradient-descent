@@ -1,11 +1,12 @@
 package net.cristcost.differentiable;
 
-import static net.cristcost.differentiable.MathLibrary.*;
+import static net.cristcost.jtflow.MathLibrary.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.cristcost.jtflow.Tensor;
 
 class TensorToStringTest {
 

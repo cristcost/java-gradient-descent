@@ -1,4 +1,4 @@
-package net.cristcost.differentiable;
+package net.cristcost.jtflow;
 
 class MeanSquareError {
   static double[] mse(Tensor a, Tensor b) {

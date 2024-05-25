@@ -1,8 +1,9 @@
 package net.cristcost.differentiable;
 
-import static net.cristcost.differentiable.MathLibrary.*;
+import static net.cristcost.jtflow.MathLibrary.*;
 import java.util.function.Function;
 import org.junit.jupiter.api.Test;
+import net.cristcost.jtflow.Tensor;
 
 class MathLibraryTest {
 

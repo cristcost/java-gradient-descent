@@ -1,4 +1,4 @@
-package net.cristcost.differentiable;
+package net.cristcost.jtflow;
 
 class DotProduct {
   static double[] dot(Tensor a, Tensor b) {

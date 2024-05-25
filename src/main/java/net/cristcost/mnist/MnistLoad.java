@@ -1,6 +1,6 @@
 package net.cristcost.mnist;
 
-import static net.cristcost.differentiable.MathLibrary.vector;
+import static net.cristcost.jtflow.MathLibrary.vector;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.IOException;
@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.imageio.ImageIO;
-import net.cristcost.differentiable.ConstantTensor;
-import net.cristcost.differentiable.Tensor;
+import net.cristcost.jtflow.ConstantTensor;
+import net.cristcost.jtflow.Tensor;
 
 public class MnistLoad {
 
