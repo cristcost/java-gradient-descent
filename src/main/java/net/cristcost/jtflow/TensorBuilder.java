@@ -5,6 +5,10 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.random.RandomGenerator;
+import net.cristcost.jtflow.api.Optimizer;
+import net.cristcost.jtflow.api.Tensor;
+import net.cristcost.jtflow.tensors.ConstantTensor;
+import net.cristcost.jtflow.tensors.VariableTensor;
 
 
 public class TensorBuilder<T extends Tensor> {

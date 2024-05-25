@@ -1,12 +1,12 @@
 package net.cristcost.differentiable;
 
 import static net.cristcost.differentiable.TensorAsserts.assertTensorsEquals;
-import static net.cristcost.jtflow.MathLibrary.*;
+import static net.cristcost.jtflow.JTFlow.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import java.util.function.Function;
 import org.junit.jupiter.api.Test;
-import net.cristcost.jtflow.ComputedTensor;
-import net.cristcost.jtflow.VariableTensor;
+import net.cristcost.jtflow.tensors.ComputedTensor;
+import net.cristcost.jtflow.tensors.VariableTensor;
 
 class MathLibraryBackpropagationTest {
 

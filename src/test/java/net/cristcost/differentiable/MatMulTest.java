@@ -1,7 +1,7 @@
 package net.cristcost.differentiable;
 
 import static net.cristcost.differentiable.TensorAsserts.assertTensorsEquals;
-import static net.cristcost.jtflow.MathLibrary.*;
+import static net.cristcost.jtflow.JTFlow.*;
 import org.junit.jupiter.api.Test;
 
 class MatMulTest {
