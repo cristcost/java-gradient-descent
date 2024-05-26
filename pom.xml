@@ -17,6 +17,9 @@
     <module>api</module>
     <module>math</module>
     <module>core</module>
+    <module>optimizers</module>
+    <module>dataset</module>
+    <module>debug</module>
     <module>extras</module>
     <module>legacy</module>
     <module>examples</module>
