@@ -10,14 +10,18 @@ public class CategoricalCrossentropy {
   public static double[] cce(Tensor prediction, Tensor oneHotEncodedLabels) {
     validateTensorCompatibility(prediction, oneHotEncodedLabels);
 
-    double result = 0.0;
-
-    for (int i = 0; i < prediction.getData().length; i++) {
-      result -=
-          oneHotEncodedLabels.get(i) * Math.log(clamp(prediction.get(i), EPSILON, 1.0 - EPSILON));
-    }
+    double result = cce(prediction.getData(), oneHotEncodedLabels.getData());
 
     return Common.makeData(result);
+  }
+
+  protected static double cce(double[] predictionData, double[] oneHotEncodedData) {
+    double result = 0.0;
+    for (int i = 0; i < predictionData.length; i++) {
+      result -=
+          oneHotEncodedData[i] * Math.log(clamp(predictionData[i], EPSILON, 1.0 - EPSILON));
+    }
+    return result;
   }
 
   private static double clamp(double inputValue, double min, double max) {

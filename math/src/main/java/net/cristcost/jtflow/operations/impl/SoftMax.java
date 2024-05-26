@@ -7,20 +7,24 @@ import net.cristcost.jtflow.api.Tensor;
 public class SoftMax {
   public static double[] softmax(Tensor a) {
     validateVectorCompatibility(a);
-    double[] result = new double[a.size()];
+    return softmax(a.getData());
+  }
+
+  protected static double[] softmax(double[] data) {
+    double[] result = new double[data.length];
     double sum = 0.0;
 
     // this is avoid Numerical instability large exponent numbers, we shift the values used for
     // computation by the max. We can do that as Softmax function is invariant to translation by a
     // constant
     double numericalInstabilityCorrection =
-        Arrays.stream(a.getData()).max().orElse(Double.NEGATIVE_INFINITY);
+        Arrays.stream(data).max().orElse(Double.NEGATIVE_INFINITY);
 
-    for (int i = 0; i < a.size(); i++) {
-      result[i] = Math.exp(a.get(i) - numericalInstabilityCorrection);
+    for (int i = 0; i < data.length; i++) {
+      result[i] = Math.exp(data[i] - numericalInstabilityCorrection);
       sum += result[i];
     }
-    for (int i = 0; i < a.size(); i++) {
+    for (int i = 0; i < data.length; i++) {
       result[i] /= sum;
     }
 
