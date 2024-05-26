@@ -5,13 +5,15 @@ import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import net.cristcost.jtflow.JTFlow;
 import net.cristcost.jtflow.api.Tensor;
+import net.cristcost.jtflow.operations.impl.Addition;
 import net.cristcost.jtflow.operations.impl.CategoricalCrossentropy;
+import net.cristcost.jtflow.operations.impl.Common;
 import net.cristcost.jtflow.operations.impl.DotProduct;
-import net.cristcost.jtflow.operations.impl.MatMul2;
-import net.cristcost.jtflow.operations.impl.MathOperationShapeComputation;
-import net.cristcost.jtflow.operations.impl.MathOperationsBackpropagation;
-import net.cristcost.jtflow.operations.impl.MathOperationsImplementation;
+import net.cristcost.jtflow.operations.impl.Exponentiation;
+import net.cristcost.jtflow.operations.impl.MatMul;
 import net.cristcost.jtflow.operations.impl.MeanSquareError;
+import net.cristcost.jtflow.operations.impl.Multiplication;
+import net.cristcost.jtflow.operations.impl.Relu;
 import net.cristcost.jtflow.operations.impl.SoftMax;
 import net.cristcost.jtflow.tensors.ComputedTensor;
 
@@ -20,27 +22,27 @@ public enum Operation {
 
   ADDITION(
       true,
-      MathOperationsImplementation::sum,
-      MathOperationShapeComputation::maxShape,
-      MathOperationsBackpropagation::sum),
+      Addition::sum,
+      Common::maxShape,
+      Addition::chain),
 
   MULTIPLICATION(
       true,
-      MathOperationsImplementation::multiply,
-      MathOperationShapeComputation::maxShape,
-      MathOperationsBackpropagation::multiply),
+      Multiplication::multiply,
+      Common::maxShape,
+      Multiplication::chain),
 
   ESPONENTIATION(
       true,
-      operands -> MathOperationsImplementation.pow(operands[0], operands[1]),
-      MathOperationShapeComputation::maxShape,
-      (grad, operands) -> MathOperationsBackpropagation.pow(grad, operands[0], operands[1])),
+      operands -> Exponentiation.pow(operands[0], operands[1]),
+      Common::maxShape,
+      (grad, operands) -> Exponentiation.chain(grad, operands[0], operands[1])),
 
   RELU(
       false,
-      operands -> MathOperationsImplementation.relu(operands[0]),
-      operands -> MathOperationShapeComputation.identity(operands[0]),
-      (grad, operands) -> MathOperationsBackpropagation.relu(grad, operands[0])),
+      operands -> Relu.relu(operands[0]),
+      operands -> Common.identity(operands[0]),
+      (grad, operands) -> Relu.relu(grad, operands[0])),
 
   DOT(
       false,
@@ -63,14 +65,14 @@ public enum Operation {
   SOFTMAX(
       false,
       operands -> SoftMax.softmax(operands[0]),
-      operands -> MathOperationShapeComputation.identity(operands[0]),
+      operands -> Common.identity(operands[0]),
       (grad, operands) -> SoftMax.chain(grad, operands[0])),
 
   MATMUL(
       false,
-      operands -> MatMul2.matmul(operands[0], operands[1]),
-      operands -> MatMul2.matmulShape(operands[0], operands[1]),
-      (grad, operands) -> MatMul2.chain(grad, operands[0], operands[1]));
+      operands -> MatMul.matmul(operands[0], operands[1]),
+      operands -> MatMul.shape(operands[0], operands[1]),
+      (grad, operands) -> MatMul.chain(grad, operands[0], operands[1]));
 
   private final boolean broadcastSupported;
 

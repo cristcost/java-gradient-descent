@@ -1,6 +1,5 @@
 package net.cristcost.jtflow.operations.impl;
 
-import net.cristcost.jtflow.JTFlow;
 import net.cristcost.jtflow.api.Chainable;
 import net.cristcost.jtflow.api.Tensor;
 
@@ -14,12 +13,12 @@ public class DotProduct {
       result += a.get(i) * b.get(i);
     }
 
-    return JTFlow.data(result);
+    return Common.makeData(result);
   }
 
   public static int[] shape(Tensor tensor, Tensor other) {
     validateVectorCompatibility(tensor, other);
-    return JTFlow.shape();
+    return Common.SCALAR_SHAPE;
   }
 
   private static void validateVectorCompatibility(Tensor a, Tensor b) {

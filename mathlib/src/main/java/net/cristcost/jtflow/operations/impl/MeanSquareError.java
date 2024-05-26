@@ -1,6 +1,5 @@
 package net.cristcost.jtflow.operations.impl;
 
-import net.cristcost.jtflow.JTFlow;
 import net.cristcost.jtflow.api.Chainable;
 import net.cristcost.jtflow.api.Tensor;
 
@@ -15,12 +14,12 @@ public class MeanSquareError {
     }
     result /= a.size();
 
-    return JTFlow.data(result);
+    return Common.makeData(result);
   }
 
   public static int[] shape(Tensor tensor, Tensor other) {
     validateTensorCompatibility(tensor, other);
-    return JTFlow.shape();
+    return Common.SCALAR_SHAPE;
   }
 
   private static void validateTensorCompatibility(Tensor a, Tensor b) {

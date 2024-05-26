@@ -15,6 +15,7 @@
 
   <modules>
     <module>api</module>
+    <module>mathlib</module>
     <module>core</module>
     <module>extras</module>
     <module>legacy</module>

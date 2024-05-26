@@ -10,18 +10,13 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>jtflow-core</artifactId>
-  <name>JTFlow :: Core</name>
+  <artifactId>jtflow-mathlib</artifactId>
+  <name>JTFlow :: Math Lib</name>
 
   <dependencies>
     <dependency>
       <groupId>net.cristcost.jtflow</groupId>
       <artifactId>jtflow-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>net.cristcost.jtflow</groupId>
-      <artifactId>jtflow-mathlib</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
