@@ -3,19 +3,19 @@ package net.cristcost.jtflow.operations.impl;
 import net.cristcost.jtflow.api.Chainable;
 import net.cristcost.jtflow.api.Tensor;
 
-public class CategoricalCrossentropy {
+public class NegativeLogLikelihoodLoss {
 
   private static final double EPSILON = 1e-15;
 
-  public static double[] cce(Tensor prediction, Tensor oneHotEncodedLabels) {
+  public static double[] nll(Tensor prediction, Tensor oneHotEncodedLabels) {
     validateTensorCompatibility(prediction, oneHotEncodedLabels);
 
-    double result = cce(prediction.getData(), oneHotEncodedLabels.getData());
+    double result = nll(prediction.getData(), oneHotEncodedLabels.getData());
 
     return Common.makeData(result);
   }
 
-  protected static double cce(double[] predictionData, double[] oneHotEncodedData) {
+  protected static double nll(double[] predictionData, double[] oneHotEncodedData) {
     double result = 0.0;
     for (int i = 0; i < predictionData.length; i++) {
       result -=
@@ -44,13 +44,9 @@ public class CategoricalCrossentropy {
       Tensor oneHotEncodedLabels) {
 
     if (prediction instanceof Chainable) {
-
-      double[] predictionData = prediction.getData();
-      double[] oneHotEncodedLabelsData = oneHotEncodedLabels.getData();
-      double[] innerGradient =
-          predictionsGradient(outerFunctionGradient[0], predictionData, oneHotEncodedLabelsData);
-
-      ((Chainable) prediction).backpropagate(innerGradient);
+      ((Chainable) prediction).backpropagate(
+          predictionsGradient(outerFunctionGradient[0], prediction.getData(),
+              oneHotEncodedLabels.getData()));
     }
 
     if (oneHotEncodedLabels instanceof Chainable) {
@@ -60,9 +56,9 @@ public class CategoricalCrossentropy {
     }
   }
 
-  protected static double[] predictionsGradient(double outerFunctionGradient,
-      double[] predictionData,
+  protected static double[] predictionsGradient(double outerFunctionGradient, double[] predictionData,
       double[] oneHotEncodedLabelsData) {
+
     // CrossEntropy = − ∑ i=[0..length] (oneHotLabel[i] * log(pred[i]))
     // ∂CrossEntropy / ∂pred[i] = − (oneHotLabel[i] / pred[i])
 
@@ -73,8 +69,7 @@ public class CategoricalCrossentropy {
       // As we are clamping the prediction value, the derivate varies only within this range
       if (p > EPSILON && p < 1.0 - EPSILON) {
         innerGradient[k] =
-            -outerFunctionGradient
-                * oneHotEncodedLabelsData[k % oneHotEncodedLabelsData.length]
+            -outerFunctionGradient * oneHotEncodedLabelsData[k % oneHotEncodedLabelsData.length]
                 / predictionData[k % predictionData.length];
       } else {
         innerGradient[k] = 0.0;
