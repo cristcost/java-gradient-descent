@@ -10,26 +10,10 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>jtflow-legacy</artifactId>
-  <name>JTFlow :: Legacy</name>
-  <description>Initial research monolithic implementation</description>
+  <artifactId>jtflow-api</artifactId>
+  <name>JTFlow :: API</name>
 
   <dependencies>
-    <dependency>
-      <groupId>net.cristcost.jtflow</groupId>
-      <artifactId>jtflow-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>net.cristcost.jtflow</groupId>
-      <artifactId>jtflow-core</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>net.cristcost.jtflow</groupId>
-      <artifactId>jtflow-extras</artifactId>
-      <version>${project.version}</version>
-    </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>

@@ -14,7 +14,11 @@
 
 
   <modules>
+    <module>api</module>
+    <module>core</module>
+    <module>extras</module>
     <module>legacy</module>
+    <module>examples</module>
   </modules>
 
   <organization>
