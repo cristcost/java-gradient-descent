@@ -1,17 +1,29 @@
-package net.cristcost.differentiable;
+package net.cristcost.jtflow.api;
 
-import static net.cristcost.jtflow.JTFlow.tensor;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+import net.cristcost.jtflow.api.Broadcastable;
 import net.cristcost.jtflow.api.Tensor;
 
 class BroadcastableTest {
 
   @Test
   void testBroadcastMatrix() {
-    var builder = tensor(3, 3);
 
-    Tensor tensor = builder.withData(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    final double[] data = new double[] {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    final int[] shape = new int[] {3, 3};
+    class TestTensor implements Tensor, Broadcastable {
+      @Override
+      public double[] getData() {
+        return data;
+      }
+
+      @Override
+      public int[] getShape() {
+        return shape;
+      }
+    }
+    Tensor tensor = new TestTensor();
 
     // correct indexing
     assertEquals(1.0, tensor.get(0, 0));
@@ -75,9 +87,22 @@ class BroadcastableTest {
 
   @Test
   void temp() {
-    var builder = tensor(3, 3);
 
-    Tensor tensor = builder.withData(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    final double[] data = new double[] {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    final int[] shape = new int[] {3, 3};
+    class TestTensor implements Tensor, Broadcastable {
+      @Override
+      public double[] getData() {
+        return data;
+      }
+
+      @Override
+      public int[] getShape() {
+        return shape;
+      }
+    }
+    Tensor tensor = new TestTensor();
+
     assertEquals(1.0, tensor.broadcastable(b -> b.broadcast(2, 3, 3)).get().get(0, 9));
   }
 
