@@ -18,5 +18,5 @@ buildNumber.properties
 .factorypath
 .settings/
 .DS_Store
-/legacy/mnist
-/legacy/save
+/examples/mnist
+/examples/save

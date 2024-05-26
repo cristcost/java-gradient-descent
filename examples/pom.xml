@@ -16,7 +16,22 @@
   <dependencies>
     <dependency>
       <groupId>net.cristcost.jtflow</groupId>
-      <artifactId>jtflow-legacy</artifactId>
+      <artifactId>jtflow-optimizers</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.cristcost.jtflow</groupId>
+      <artifactId>jtflow-dataset</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.cristcost.jtflow</groupId>
+      <artifactId>jtflow-debug</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.cristcost.jtflow</groupId>
+      <artifactId>jtflow-extras</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
