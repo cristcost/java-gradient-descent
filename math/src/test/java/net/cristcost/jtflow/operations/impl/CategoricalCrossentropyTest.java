@@ -1,8 +1,8 @@
 package net.cristcost.jtflow.operations.impl;
 
+import static net.cristcost.jtflow.operations.impl.CategoricalCrossentropy.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-import static net.cristcost.jtflow.operations.impl.CategoricalCrossentropy.*;
 
 class CategoricalCrossentropyTest {
 
@@ -27,33 +27,34 @@ class CategoricalCrossentropyTest {
   @Test
   void testBackpropagation() {
 
-    assertArrayEquals(data(-1.0, 0.0, 0.0),
+    assertArrayEquals(data(-0.42388308, 0.21194157, 0.21194157),
         predictionsGradient(1.0, data(1.0, 0.0, 0.0), data(1.0, 0.0, 0.0)), DELTA);
-    assertArrayEquals(data(-0.0, 0.0, 0.0),
+    assertArrayEquals(data(0.5761169, -0.7880584, 0.21194157),
         predictionsGradient(1.0, data(1.0, 0.0, 0.0), data(0.0, 1.0, 0.0)), DELTA);
-    assertArrayEquals(data(-1.1111112, -0.0, 0.0),
+    assertArrayEquals(data(-0.46117747, 0.24210858, 0.2190689),
         predictionsGradient(1.0, data(0.9, 0.1, 0.0), data(1.0, 0.0, 0.0)), DELTA);
-    assertArrayEquals(data(-3.0003002, -0.0, -0.0),
+    assertArrayEquals(data(-0.6666667, 0.3333333, 0.3333333),
         predictionsGradient(1.0, data(0.3333, 0.3333, 0.3333), data(1.0, 0.0, 0.0)), DELTA);
-    assertArrayEquals(data(-2.5, -0.0, -0.0),
+    assertArrayEquals(data(-0.64408696, 0.32204345, 0.32204345),
         predictionsGradient(1.0, data(0.4, 0.3, 0.3), data(1.0, 0.0, 0.0)), DELTA);
-    assertArrayEquals(data(-1.6666664, -0.0, -0.0),
+    assertArrayEquals(data(-0.5727664, 0.2863832, 0.2863832),
         predictionsGradient(1.0, data(0.6000001, 0.20000002, 0.20000002), data(1.0, 0.0, 0.0)),
         DELTA);
 
-    assertArrayEquals(data(-5.0, 0.0, 0.0),
+    assertArrayEquals(data(-2.1194153, 1.0597079, 1.0597079),
         predictionsGradient(5.0, data(1.0, 0.0, 0.0), data(1.0, 0.0, 0.0)), DELTA);
-    assertArrayEquals(data(-0.0, 0.0, 0.0),
+    assertArrayEquals(data(2.8805847, -3.9402921, 1.0597079),
         predictionsGradient(5.0, data(1.0, 0.0, 0.0), data(0.0, 1.0, 0.0)), DELTA);
-    assertArrayEquals(data(-5.555556, -0.0, 0.0),
+    assertArrayEquals(data(-2.3058872, 1.2105429, 1.0953445),
         predictionsGradient(5.0, data(0.9, 0.1, 0.0), data(1.0, 0.0, 0.0)), DELTA);
-    assertArrayEquals(data(-15.0015, -0.0, -0.0),
+    assertArrayEquals(data(-3.3333335, 1.6666665, 1.6666665),
         predictionsGradient(5.0, data(0.3333, 0.3333, 0.3333), data(1.0, 0.0, 0.0)), DELTA);
-    assertArrayEquals(data(-12.5, -0.0, -0.0),
+    assertArrayEquals(data(-3.2204347, 1.6102172, 1.6102172),
         predictionsGradient(5.0, data(0.4, 0.3, 0.3), data(1.0, 0.0, 0.0)), DELTA);
-    assertArrayEquals(data(-8.333332, -0.0, -0.0),
+    assertArrayEquals(data(-2.863832, 1.431916, 1.431916),
         predictionsGradient(5.0, data(0.6000001, 0.20000002, 0.20000002), data(1.0, 0.0, 0.0)),
         DELTA);
+
 
   }
 

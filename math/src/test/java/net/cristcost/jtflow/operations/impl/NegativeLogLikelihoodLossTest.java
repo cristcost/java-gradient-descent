@@ -25,21 +25,21 @@ class NegativeLogLikelihoodLossTest {
   @Test
   void testBackpropagation() {
 
-    assertArrayEquals(data(0.0, 0.0, 0.0),
+    assertArrayEquals(data(-1.0, 0.0, 0.0),
         predictionsGradient(1.0, data(1.0, 0.0, 0.0), data(1.0, 0.0, 0.0)), DELTA);
-    assertArrayEquals(data(0.0, 0.0, 0.0),
+    assertArrayEquals(data(-0.0, 0.0, 0.0),
         predictionsGradient(1.0, data(1.0, 0.0, 0.0), data(0.0, 1.0, 0.0)), DELTA);
-    assertArrayEquals(data(-1.1111112, 0.0, 0.0),
+    assertArrayEquals(data(-1.1111112, -0.0, 0.0),
         predictionsGradient(1.0, data(0.9, 0.1, 0.0), data(1.0, 0.0, 0.0)), DELTA);
-    assertArrayEquals(data(-3.0003002, 0.0, 0.0),
+    assertArrayEquals(data(-3.0003002, -0.0, -0.0),
         predictionsGradient(1.0, data(0.3333, 0.3333, 0.3333), data(1.0, 0.0, 0.0)), DELTA);
-    assertArrayEquals(data(-2.5, 0.0, 0.0),
+    assertArrayEquals(data(-2.5, -0.0, -0.0),
         predictionsGradient(1.0, data(0.4, 0.3, 0.3), data(1.0, 0.0, 0.0)), DELTA);
     assertArrayEquals(data(-1.6666664, -0.0, -0.0),
-        predictionsGradient(1.0, data(0.6, 0.2, 0.2), data(1.0, 0.0, 0.0)),
+        predictionsGradient(1.0, data(0.6000001, 0.20000002, 0.20000002), data(1.0, 0.0, 0.0)),
         DELTA);
 
-    assertArrayEquals(data(0.0, 0.0, 0.0),
+    assertArrayEquals(data(-5.0, 0.0, 0.0),
         predictionsGradient(5.0, data(1.0, 0.0, 0.0), data(1.0, 0.0, 0.0)), DELTA);
     assertArrayEquals(data(-0.0, 0.0, 0.0),
         predictionsGradient(5.0, data(1.0, 0.0, 0.0), data(0.0, 1.0, 0.0)), DELTA);
@@ -52,7 +52,5 @@ class NegativeLogLikelihoodLossTest {
     assertArrayEquals(data(-8.333332, -0.0, -0.0),
         predictionsGradient(5.0, data(0.6000001, 0.20000002, 0.20000002), data(1.0, 0.0, 0.0)),
         DELTA);
-
-
   }
 }

@@ -67,7 +67,9 @@ public class NegativeLogLikelihoodLoss {
 
       double p = predictionData[k % predictionData.length];
       // As we are clamping the prediction value, the derivate varies only within this range
-      if (p > EPSILON && p < 1.0 - EPSILON) {
+      // if (p > EPSILON && p < 1.0 - EPSILON) {
+      // looks like pytorch is not clamping the prediction to a max
+      if (p > EPSILON ) {
         innerGradient[k] =
             -outerFunctionGradient * oneHotEncodedLabelsData[k % oneHotEncodedLabelsData.length]
                 / predictionData[k % predictionData.length];
