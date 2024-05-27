@@ -11,14 +11,10 @@
   </parent>
 
   <artifactId>jtflow-math</artifactId>
-  <name>JTFlow :: Math Lib</name>
+  <name>JTFlow :: Math and Gradient Lib</name>
 
   <dependencies>
-    <dependency>
-      <groupId>net.cristcost.jtflow</groupId>
-      <artifactId>jtflow-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
@@ -37,6 +33,6 @@
       <artifactId>jackson-databind</artifactId>
       <version>${jackson.version}</version>
       <scope>test</scope>
-	 </dependency>
+   </dependency>
   </dependencies>
 </project>

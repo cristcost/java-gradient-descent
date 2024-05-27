@@ -16,6 +16,7 @@
   <modules>
     <module>api</module>
     <module>math</module>
+    <module>tensormath</module>
     <module>core</module>
     <module>optimizers</module>
     <module>dataset</module>
