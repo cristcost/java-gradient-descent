@@ -105,7 +105,7 @@ public class Mnist {
 
           ComputedTensor layer1Out = relu(sum(matmul(input, layer1Weights), layer1Bias));
           ComputedTensor layer2Out = relu(sum(matmul(layer1Out, layer2Weights), layer2Bias));
-          ComputedTensor prediction = softmax(sum(matmul(layer2Out, layer3Weights), layer3Bias));
+          ComputedTensor prediction = sum(matmul(layer2Out, layer3Weights), layer3Bias);
 
           ComputedTensor partialCategoricalCrossEntropyLoss =
               categoricalCrossentropy(prediction, oneHotEncodedLabel);
