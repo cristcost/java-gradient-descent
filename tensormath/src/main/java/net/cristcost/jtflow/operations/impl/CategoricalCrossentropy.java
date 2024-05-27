@@ -60,73 +60,14 @@ public class CategoricalCrossentropy {
     // f(g(x)) = nll(softmax(x), oneHotEncodedData)
     // ∂f(g(x))/∂x = f'(g(x)) * g'(x) = nll'(softmax(x), oneHotEncodedData) * softmax'(x)
 
-
-
     double[] nllGradient = NegativeLogLikelihoodLoss.predictionsGradient(outerFunctionGradient,
         SoftMax.softmax(predictionData), oneHotEncodedLabelsData);
 
     double[] gradient = SoftMax.gradient(nllGradient, predictionData);
-    // for (int i = 0; i < gradient.length; i++) {
-    // gradient[i] *= nllGradient[i];
-    // }
 
     return gradient;
-
-    // // CrossEntropy = − ∑ i=[0..length] (oneHotLabel[i] * log(pred[i]))
-    // // ∂CrossEntropy / ∂pred[i] = − (oneHotLabel[i] / pred[i])
-    //
-    // double[] innerGradient = new double[predictionData.length];
-    // for (int k = 0; k < innerGradient.length; k++) {
-    //
-    // double p = predictionData[k % predictionData.length];
-    // // As we are clamping the prediction value, the derivate varies only within this range
-    // if (p > EPSILON && p < 1.0 - EPSILON) {
-    // innerGradient[k] =
-    // -outerFunctionGradient
-    // * oneHotEncodedLabelsData[k % oneHotEncodedLabelsData.length]
-    // / predictionData[k % predictionData.length];
-    // } else {
-    // innerGradient[k] = 0.0;
-    // }
-    // }
-    // return innerGradient;
   }
 
-
-  public static double f(double[] x) {
-    return Arrays.stream(x).sum();
-  }
-
-  public static double[] dfdx(double[] x) {
-    double[] ret = new double[x.length];
-    Arrays.fill(ret, 1.0);
-    return ret;
-  }
-
-  public static double[] g(double[] x) {
-    double[] ret = x.clone();
-    for (int i = 0; i < ret.length; i++) {
-      ret[i] *= 3;
-    }
-    return ret;
-  }
-
-  public static double[] dgdx(double[] x) {
-    double[] ret = new double[x.length];
-    Arrays.fill(ret, 3.0);
-    return ret;
-  }
-
-  public static double[] dhdx(double[] x) {
-    double[] ret = new double[x.length];
-
-    double[] dfdxOfG = dfdx(g(x));
-    double[] dgdx = dgdx(x);
-    for (int i = 0; i < ret.length; i++) {
-      ret[i] = dfdxOfG[i] * dgdx[i];
-    }
-    return ret;
-  }
 
 
 }
