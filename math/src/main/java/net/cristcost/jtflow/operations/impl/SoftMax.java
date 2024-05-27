@@ -4,6 +4,7 @@ import java.util.Arrays;
 import net.cristcost.jtflow.api.Chainable;
 import net.cristcost.jtflow.api.Tensor;
 
+
 public class SoftMax {
   public static double[] softmax(Tensor a) {
     validateVectorCompatibility(a);

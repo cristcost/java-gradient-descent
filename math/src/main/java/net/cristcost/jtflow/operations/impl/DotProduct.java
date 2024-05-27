@@ -3,6 +3,8 @@ package net.cristcost.jtflow.operations.impl;
 import net.cristcost.jtflow.api.Chainable;
 import net.cristcost.jtflow.api.Tensor;
 
+// Not tested and not to be used in this form 
+@Deprecated()
 public class DotProduct {
   public static double[] dot(Tensor a, Tensor b) {
     validateVectorCompatibility(a, b);

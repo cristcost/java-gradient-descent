@@ -4,6 +4,8 @@ import java.util.Arrays;
 import net.cristcost.jtflow.api.Chainable;
 import net.cristcost.jtflow.api.Tensor;
 
+//Not tested and not to be used in this form 
+@Deprecated()
 public class Multiplication {
 
   public static double[] multiply(Tensor... operands) {

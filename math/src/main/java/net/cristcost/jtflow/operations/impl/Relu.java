@@ -2,7 +2,8 @@ package net.cristcost.jtflow.operations.impl;
 
 import net.cristcost.jtflow.api.Chainable;
 import net.cristcost.jtflow.api.Tensor;
-
+//Not tested and not to be used in this form 
+@Deprecated()
 public class Relu {
 
   public static void relu(double[] outerFunctionGradient, Tensor operand) {
