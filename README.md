@@ -50,6 +50,7 @@ tot_rounds_per_epoch = int(samples_count/64)
 handwrittenDigitParserModel = HandwrittenDigitParserModel()
 
 optimizer = optim.SGD(handwrittenDigitParserModel.parameters(), lr=0.01, momentum=0.9)
+# optimizer = optim.RMSprop(model.parameters(), lr=0.01, alpha=0.9, eps=1e-08)
 
 # Training loop
 num_epochs = 25
@@ -65,18 +66,18 @@ for epoch in range(num_epochs):
     for round, (inputs, labels) in enumerate(train_loader):
         optimizer.zero_grad()
 
-        outputs = handwrittenDigitParserModel(inputs)
+        probabilities = handwrittenDigitParserModel(inputs)
 
         true_labels_one_hot = F.one_hot(labels, num_classes=10).float()
-
-        probabilities = F.softmax(outputs, dim=1)
-
+        
+        # loss = F.mse_loss(true_labels_one_hot,probabilities)
         loss = F.cross_entropy(probabilities, true_labels_one_hot)
+
 
         loss.backward()
         optimizer.step()
 
-        predicted = torch.argmax(outputs, dim=1)
+        predicted = torch.argmax(probabilities, dim=1)
         correct = (predicted == labels).sum().item()
 
         epoch_correct += correct
@@ -90,7 +91,7 @@ for epoch in range(num_epochs):
             print("    Correct predictions: ", correct, " out of ", labels.size(0))
     print("         Epoch Loss value: ", epoch_loss/tot_rounds_per_epoch)
     print("Epoch Correct predictions: ", epoch_correct, " out of ", epoch_samples)
-    if(epoch_correct / epoch_samples > 0.86):
+    if(epoch_correct / epoch_samples > 0.90):
         break
 
 print("Finished Training")
