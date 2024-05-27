@@ -44,24 +44,24 @@ public class Mnist {
     final VariableTensor layer1Weights =
         load ? matrix(28 * 28, 128).variable()
             .clone(Tensor.fromFile(Path.of("save/layer1Weights.tensor")))
-            : matrix(28 * 28, 128).variable().normal(0.0, 1.0);
+            : matrix(28 * 28, 128).variable().uniform(-Math.sqrt(1.0/(28*28)), Math.sqrt(1.0/(28*28)));
     final VariableTensor layer1Bias =
         load ? vector(128).variable().clone(Tensor.fromFile(Path.of("save/layer1Bias.tensor")))
-            : vector(128).variable().normal(0.0, 1.0);
+            : vector(128).variable().zeros();
     final VariableTensor layer2Weights =
         load ? matrix(128, 64).variable()
             .clone(Tensor.fromFile(Path.of("save/layer2Weights.tensor")))
-            : matrix(128, 64).variable().normal(0.0, 1.0);
+            : matrix(128, 64).variable().uniform(-Math.sqrt(1.0/(128)), Math.sqrt(1.0/(128)));
     final VariableTensor layer2Bias =
         load ? vector(64).variable().clone(Tensor.fromFile(Path.of("save/layer2Bias.tensor")))
-            : vector(64).variable().normal(0.0, 1.0);
+            : vector(64).variable().zeros();
     final VariableTensor layer3Weights =
         load ? matrix(64, 10).variable()
             .clone(Tensor.fromFile(Path.of("save/layer3Weights.tensor")))
-            : matrix(64, 10).variable().normal(0.0, 1.0);
+            : matrix(64, 10).variable().uniform(-Math.sqrt(1.0/(64)), Math.sqrt(1.0/(64)));
     final VariableTensor layer3Bias =
         load ? vector(10).variable().clone(Tensor.fromFile(Path.of("save/layer3Bias.tensor")))
-            : vector(10).variable().normal(0.0, 1.0);
+            : vector(10).variable().zeros();
 
     layer1Weights.setOptimizer(new SgdWithMomentumOptimizer(0.01, 0.9));
     layer1Bias.setOptimizer(new SgdWithMomentumOptimizer(0.01, 0.9));
