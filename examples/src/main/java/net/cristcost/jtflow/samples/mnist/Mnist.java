@@ -44,21 +44,21 @@ public class Mnist {
     final VariableTensor layer1Weights =
         load ? matrix(28 * 28, 128).variable()
             .clone(Tensor.fromFile(Path.of("save/layer1Weights.tensor")))
-            : matrix(28 * 28, 128).variable().uniform(-Math.sqrt(1.0/(28*28)), Math.sqrt(1.0/(28*28)));
+            : matrix(28 * 28, 128).variable().kaimingUniform();
     final VariableTensor layer1Bias =
         load ? vector(128).variable().clone(Tensor.fromFile(Path.of("save/layer1Bias.tensor")))
             : vector(128).variable().zeros();
     final VariableTensor layer2Weights =
         load ? matrix(128, 64).variable()
             .clone(Tensor.fromFile(Path.of("save/layer2Weights.tensor")))
-            : matrix(128, 64).variable().uniform(-Math.sqrt(1.0/(128)), Math.sqrt(1.0/(128)));
+            : matrix(128, 64).variable().kaimingUniform();
     final VariableTensor layer2Bias =
         load ? vector(64).variable().clone(Tensor.fromFile(Path.of("save/layer2Bias.tensor")))
             : vector(64).variable().zeros();
     final VariableTensor layer3Weights =
         load ? matrix(64, 10).variable()
             .clone(Tensor.fromFile(Path.of("save/layer3Weights.tensor")))
-            : matrix(64, 10).variable().uniform(-Math.sqrt(1.0/(64)), Math.sqrt(1.0/(64)));
+            : matrix(64, 10).variable().kaimingUniform();
     final VariableTensor layer3Bias =
         load ? vector(10).variable().clone(Tensor.fromFile(Path.of("save/layer3Bias.tensor")))
             : vector(10).variable().zeros();
@@ -183,7 +183,7 @@ public class Mnist {
       System.out.println("         Epoch Loss value: " + epochLoss);
       System.out.println("Epoch Correct predictions: " + epochCorrect + " out of " + epochSamples);
 
-      if ((double) epochCorrect / epochSamples > 0.86) {
+      if ((double) epochCorrect / epochSamples > 0.90) {
         break;
       }
     }

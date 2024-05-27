@@ -69,7 +69,7 @@ public class TensorBuilder<T extends Tensor> {
     return withData(data);
   }
 
-  
+
   public T repeat(double value) {
     int size = shapeSize(shape);
     double[] data = new double[size];
@@ -79,6 +79,13 @@ public class TensorBuilder<T extends Tensor> {
 
   public T uniform(double minval, double maxval) {
     return rand(() -> RandomGenerator.getDefault().nextDouble(minval, maxval));
+  }
+
+  public T kaimingUniform() {
+    double inputFeatures = shape[0];
+    double maxval = Math.sqrt(1.0 / (inputFeatures));
+
+    return rand(() -> RandomGenerator.getDefault().nextDouble(-maxval, maxval));
   }
 
   @SuppressWarnings("unchecked")
