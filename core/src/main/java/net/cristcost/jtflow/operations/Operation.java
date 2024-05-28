@@ -22,55 +22,55 @@ public enum Operation {
 
   ADDITION(
       true,
-      Addition::sum,
+      Addition::compute,
       Common::maxShape,
       Addition::chain),
 
   MULTIPLICATION(
       true,
-      Multiplication::multiply,
+      Multiplication::compute,
       Common::maxShape,
       Multiplication::chain),
 
   ESPONENTIATION(
       true,
-      operands -> Exponentiation.pow(operands[0], operands[1]),
+      operands -> Exponentiation.compute(operands[0], operands[1]),
       Common::maxShape,
       (grad, operands) -> Exponentiation.chain(grad, operands[0], operands[1])),
 
   RELU(
       false,
-      operands -> Relu.relu(operands[0]),
+      operands -> Relu.compute(operands[0]),
       operands -> Common.identity(operands[0]),
-      (grad, operands) -> Relu.relu(grad, operands[0])),
+      (grad, operands) -> Relu.chain(grad, operands[0])),
 
   DOT(
       false,
-      operands -> DotProduct.dot(operands[0], operands[1]),
+      operands -> DotProduct.compute(operands[0], operands[1]),
       operands -> DotProduct.shape(operands[0], operands[1]),
       (grad, operands) -> DotProduct.chain(grad, operands[0], operands[1])),
 
   MSE(
       false,
-      operands -> MeanSquareError.mse(operands[0], operands[1]),
+      operands -> MeanSquareError.compute(operands[0], operands[1]),
       operands -> MeanSquareError.shape(operands[0], operands[1]),
       (grad, operands) -> MeanSquareError.chain(grad, operands[0], operands[1])),
 
   CATEGORICAL_CROSSENTROPY(
       false,
-      operands -> CategoricalCrossentropy.cce(operands[0], operands[1]),
+      operands -> CategoricalCrossentropy.compute(operands[0], operands[1]),
       operands -> CategoricalCrossentropy.shape(operands[0], operands[1]),
       (grad, operands) -> CategoricalCrossentropy.chain(grad, operands[0], operands[1])),
 
   SOFTMAX(
       false,
-      operands -> SoftMax.softmax(operands[0]),
+      operands -> SoftMax.compute(operands[0]),
       operands -> Common.identity(operands[0]),
       (grad, operands) -> SoftMax.chain(grad, operands[0])),
 
   MATMUL(
       false,
-      operands -> MatMul.matmul(operands[0], operands[1]),
+      operands -> MatMul.compute(operands[0], operands[1]),
       operands -> MatMul.shape(operands[0], operands[1]),
       (grad, operands) -> MatMul.chain(grad, operands[0], operands[1]));
 

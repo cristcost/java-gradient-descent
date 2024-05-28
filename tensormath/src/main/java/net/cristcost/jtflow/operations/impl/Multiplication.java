@@ -4,24 +4,9 @@ import java.util.Arrays;
 import net.cristcost.jtflow.api.Chainable;
 import net.cristcost.jtflow.api.Tensor;
 
-//Not tested and not to be used in this form 
+// Not tested and not to be used in this form
 @Deprecated()
 public class Multiplication {
-
-  public static double[] multiply(Tensor... operands) {
-    double[] data = new double[operands[0].size()];
-    Arrays.fill(data, 1.0);
-
-    for (Tensor t : operands) {
-      if (data.length != t.size()) {
-        throw new IllegalArgumentException("Shapes do not match.");
-      }
-      for (int i = 0; i < data.length; i++) {
-        data[i] *= t.get(i);
-      }
-    }
-    return data;
-  }
 
   public static void chain(double[] outerFunctionGradient, Tensor... operands) {
     for (int i = 0; i < operands.length; i++) {
@@ -40,6 +25,21 @@ public class Multiplication {
         computed.backpropagate(innerGradient);
       }
     }
+  }
+
+  public static double[] compute(Tensor... operands) {
+    double[] data = new double[operands[0].size()];
+    Arrays.fill(data, 1.0);
+
+    for (Tensor t : operands) {
+      if (data.length != t.size()) {
+        throw new IllegalArgumentException("Shapes do not match.");
+      }
+      for (int i = 0; i < data.length; i++) {
+        data[i] *= t.get(i);
+      }
+    }
+    return data;
   }
 
 }
