@@ -4,7 +4,7 @@ import net.cristcost.jtflow.api.Tensor;
 
 public class Common {
 
-  public static final int[] SCALAR_SHAPE = new int[] {};
+  public static final int[] SCALAR_SHAPE = {};
 
   public static int[] identity(Tensor tensor) {
     return tensor.getShape();

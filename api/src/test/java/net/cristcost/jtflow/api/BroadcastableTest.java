@@ -8,8 +8,8 @@ class BroadcastableTest {
   @Test
   void temp() {
 
-    final double[] data = new double[] {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    final int[] shape = new int[] {3, 3};
+    final double[] data = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    final int[] shape = {3, 3};
     class TestTensor implements Tensor, Broadcastable {
       @Override
       public double[] getData() {
@@ -29,8 +29,8 @@ class BroadcastableTest {
   @Test
   void testBroadcastMatrix() {
 
-    final double[] data = new double[] {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    final int[] shape = new int[] {3, 3};
+    final double[] data = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    final int[] shape = {3, 3};
     class TestTensor implements Tensor, Broadcastable {
       @Override
       public double[] getData() {
