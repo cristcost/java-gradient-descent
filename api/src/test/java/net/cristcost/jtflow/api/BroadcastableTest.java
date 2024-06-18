@@ -6,27 +6,6 @@ import org.junit.jupiter.api.Test;
 class BroadcastableTest {
 
   @Test
-  void temp() {
-
-    final double[] data = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    final int[] shape = {3, 3};
-    class TestTensor implements Tensor, Broadcastable {
-      @Override
-      public double[] getData() {
-        return data;
-      }
-
-      @Override
-      public int[] getShape() {
-        return shape;
-      }
-    }
-    Tensor tensor = new TestTensor();
-
-    assertEquals(1.0, tensor.broadcastable(b -> b.broadcast(2, 3, 3)).get().get(0, 9));
-  }
-
-  @Test
   void testBroadcastMatrix() {
 
     final double[] data = {1, 2, 3, 4, 5, 6, 7, 8, 9};
