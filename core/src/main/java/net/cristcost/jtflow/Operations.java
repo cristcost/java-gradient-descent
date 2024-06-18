@@ -75,7 +75,20 @@ public enum Operations implements Operation {
       operands -> MatMul.shape(operands[0], operands[1]),
       (grad, operands) -> MatMul.chain(grad, operands[0], operands[1]));
 
+  private static void backPropagationNotImplemented(double[] gradient, Tensor... operands) {
+    throw new UnsupportedOperationException("Not yet implemented");
+  }
+
+  private static double[] operationNotImplemented(Tensor... operands) {
+    throw new UnsupportedOperationException("Not yet implemented");
+  }
+
+  private static int[] resultShapeNotImplemented(Tensor... operands) {
+    throw new UnsupportedOperationException("Not yet implemented");
+  }
+
   private final boolean broadcastSupported;
+
 
   private final Function<Tensor[], double[]> operationFunction;
 
@@ -83,6 +96,10 @@ public enum Operations implements Operation {
 
   private final BiConsumer<double[], Tensor[]> backpropagationFunction;
 
+  @Override
+  public void backpropagate(double[] gradient, Tensor... operands) {
+    backpropagationFunction.accept(gradient, operands);
+  }
 
   @Override
   public ComputedTensor compute(Tensor... operands) {
@@ -93,23 +110,6 @@ public enum Operations implements Operation {
 
     Computation computation = new Computation(this, operands);
     return new ComputedTensor(operationResult, shape, computation);
-  }
-
-  @Override
-  public void backpropagate(double[] gradient, Tensor... operands) {
-    backpropagationFunction.accept(gradient, operands);
-  }
-
-  private static double[] operationNotImplemented(Tensor... operands) {
-    throw new UnsupportedOperationException("Not yet implemented");
-  }
-
-  private static void backPropagationNotImplemented(double[] gradient, Tensor... operands) {
-    throw new UnsupportedOperationException("Not yet implemented");
-  }
-
-  private static int[] resultShapeNotImplemented(Tensor... operands) {
-    throw new UnsupportedOperationException("Not yet implemented");
   }
 
 

@@ -47,7 +47,8 @@ public class Mnist {
             .clone(TensorLoader.fromFile(Path.of("save/layer1Weights.tensor")))
             : matrix(28 * 28, 128).variable().kaimingUniform();
     final VariableTensor layer1Bias =
-        load ? vector(128).variable().clone(TensorLoader.fromFile(Path.of("save/layer1Bias.tensor")))
+        load ? vector(128).variable()
+            .clone(TensorLoader.fromFile(Path.of("save/layer1Bias.tensor")))
             : vector(128).variable().zeros();
     final VariableTensor layer2Weights =
         load ? matrix(128, 64).variable()

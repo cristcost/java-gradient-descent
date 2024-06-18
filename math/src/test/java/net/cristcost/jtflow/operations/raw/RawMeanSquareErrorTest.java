@@ -74,7 +74,8 @@ class RawMeanSquareErrorTest {
     assertEquals(0.0, compute(data(1.0, 0.0, 0.0), data(1.0, 0.0, 0.0)), DELTA);
     assertEquals(0.6666666865348816, compute(data(1.0, 0.0, 0.0), data(0.0, 1.0, 0.0)), DELTA);
     assertEquals(0.006666668225079775, compute(data(0.9, 0.1, 0.0), data(1.0, 0.0, 0.0)), DELTA);
-    assertEquals(0.2222222089767456, compute(data(0.3333, 0.3333, 0.3333), data(1.0, 0.0, 0.0)), DELTA);
+    assertEquals(0.2222222089767456, compute(data(0.3333, 0.3333, 0.3333), data(1.0, 0.0, 0.0)),
+        DELTA);
     assertEquals(0.18000000715255737, compute(data(0.4, 0.3, 0.3), data(1.0, 0.0, 0.0)), DELTA);
     assertEquals(0.07999998331069946,
         compute(data(0.6000001, 0.20000002, 0.20000002), data(1.0, 0.0, 0.0)), DELTA);

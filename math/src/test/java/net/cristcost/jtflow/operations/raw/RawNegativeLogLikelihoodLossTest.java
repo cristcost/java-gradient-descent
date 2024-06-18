@@ -49,7 +49,8 @@ class RawNegativeLogLikelihoodLossTest {
     assertEquals(0.0, compute(data(1.0, 0.0, 0.0), data(1.0, 0.0, 0.0)), DELTA);
     assertEquals(34.53877639770508, compute(data(1.0, 0.0, 0.0), data(0.0, 1.0, 0.0)), DELTA);
     assertEquals(0.10536054521799088, compute(data(0.9, 0.1, 0.0), data(1.0, 0.0, 0.0)), DELTA);
-    assertEquals(1.0987123250961304, compute(data(0.3333, 0.3333, 0.3333), data(1.0, 0.0, 0.0)), DELTA);
+    assertEquals(1.0987123250961304, compute(data(0.3333, 0.3333, 0.3333), data(1.0, 0.0, 0.0)),
+        DELTA);
     assertEquals(0.9162907004356384, compute(data(0.4, 0.3, 0.3), data(1.0, 0.0, 0.0)), DELTA);
 
   }

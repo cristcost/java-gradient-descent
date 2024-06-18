@@ -4,10 +4,10 @@ import net.cristcost.jtflow.api.Tensor;
 
 public interface Operation {
 
+  void backpropagate(double[] gradient, Tensor... operands);
+
   Tensor compute(Tensor... operands);
 
-  void backpropagate(double[] gradient, Tensor... operands);
-  
   String name();
- 
+
 }

@@ -13,8 +13,8 @@ import net.cristcost.jtflow.tensors.VariableTensor;
 
 public class TensorBuilder<T extends Tensor> {
 
-  
-  
+
+
   public static TensorBuilder<ConstantTensor> builder(int[] shape) {
     return new TensorBuilder<>(ConstantTensor.class, shape, (d, s) -> new ConstantTensor(d, s));
   }

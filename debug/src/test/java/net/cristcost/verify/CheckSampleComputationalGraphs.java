@@ -6,14 +6,6 @@ import net.cristcost.jtflow.utils.ComputationGraphStats;
 
 public class CheckSampleComputationalGraphs {
 
-  public static Tensor fibonacci(int n) {
-    if (n > 1) {
-      return sum(fibonacci(n - 1), fibonacci(n - 2));
-    } else {
-      return scalar().withData((double) n);
-    }
-  }
-
   public static Tensor factorial(int n) {
     if (n > 1) {
       return multiply(scalar().withData((double) n), factorial(n - 1));
@@ -22,13 +14,12 @@ public class CheckSampleComputationalGraphs {
     }
   }
 
-  public static Tensor reluQuadraticFunction(double value) {
-    Tensor x = scalar().withData(value);
-
-    return relu(sum(
-        multiply((scalar().withData(-0.5)), pow(x, scalar().withData(2.0))),
-        multiply(scalar().withData(2.0), x),
-        scalar().withData(6.0)));
+  public static Tensor fibonacci(int n) {
+    if (n > 1) {
+      return sum(fibonacci(n - 1), fibonacci(n - 2));
+    } else {
+      return scalar().withData((double) n);
+    }
   }
 
   public static void main(String[] args) {
@@ -52,6 +43,15 @@ public class CheckSampleComputationalGraphs {
     System.out.println("## computation graph:");
     ComputationGraphStats.printComputationGraph(reluQuadraticFunction);
     System.out.println();
+  }
+
+  public static Tensor reluQuadraticFunction(double value) {
+    Tensor x = scalar().withData(value);
+
+    return relu(sum(
+        multiply((scalar().withData(-0.5)), pow(x, scalar().withData(2.0))),
+        multiply(scalar().withData(2.0), x),
+        scalar().withData(6.0)));
   }
 
 }

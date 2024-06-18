@@ -7,16 +7,6 @@ import org.junit.jupiter.api.Test;
 class MatMulTest {
 
   @Test
-  void testScalarProduct() {
-    var matrix1By1 = matrix(1, 1);
-
-    // 2 dimensional matrices
-    assertTensorsEquals(
-        matrix1By1.withData(10.0),
-        matmul(matrix1By1.withData(2.0), matrix1By1.withData(5.0)));
-  }
-
-  @Test
   void testDotProduct() {
     var matrix1By1 = matrix(1, 1);
     var matrix1By3 = matrix(1, 3);
@@ -58,6 +48,16 @@ class MatMulTest {
             matrix3By3.withData(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0),
             matrix3By3.withData(-3.0, -1.0, 0.0, -1.0, 0.0, 1.0, 0.0, 1.0, 3.0)));
 
+  }
+
+  @Test
+  void testScalarProduct() {
+    var matrix1By1 = matrix(1, 1);
+
+    // 2 dimensional matrices
+    assertTensorsEquals(
+        matrix1By1.withData(10.0),
+        matmul(matrix1By1.withData(2.0), matrix1By1.withData(5.0)));
   }
 
 

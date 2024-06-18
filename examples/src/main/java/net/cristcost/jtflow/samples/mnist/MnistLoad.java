@@ -17,6 +17,20 @@ import net.cristcost.jtflow.tensors.ConstantTensor;
 
 public class MnistLoad {
 
+  public static List<Sample> findSamplesInFolder(Path folder) throws IOException {
+    return findSamplesInFolderAsStream(folder)
+        .collect(Collectors.toList());
+
+  }
+
+  public static Stream<Sample> findSamplesInFolderAsStream(Path folder) throws IOException {
+    // note: case sensitive extension and fixed layout, designed to work with mnist_png layout
+    return Files.walk(folder)
+        .filter(f -> !Files.isDirectory(f))
+        .filter(f -> f.getFileName().toString().endsWith(".png"))
+        .map(MnistLoad::sampleFromMnistPath);
+  }
+
   public static void main(String[] args) throws IOException {
 
     // long initTime = System.currentTimeMillis();
@@ -46,20 +60,6 @@ public class MnistLoad {
 
   }
 
-  public static List<Sample> findSamplesInFolder(Path folder) throws IOException {
-    return findSamplesInFolderAsStream(folder)
-        .collect(Collectors.toList());
-
-  }
-
-  public static Stream<Sample> findSamplesInFolderAsStream(Path folder) throws IOException {
-    // note: case sensitive extension and fixed layout, designed to work with mnist_png layout
-    return Files.walk(folder)
-        .filter(f -> !Files.isDirectory(f))
-        .filter(f -> f.getFileName().toString().endsWith(".png"))
-        .map(MnistLoad::sampleFromMnistPath);
-  }
-
   public static Sample sampleFromMnistPath(Path mnistPath) {
     Path imageAbsolutePath = mnistPath.toAbsolutePath();
     if (!Files.exists(imageAbsolutePath)) {
@@ -72,6 +72,11 @@ public class MnistLoad {
       Tensor tensor = null;
 
       @Override
+      public int getLabel() {
+        return label;
+      }
+
+      @Override
       public Tensor getTensor() {
         if (tensor == null) {
           try {
@@ -81,11 +86,6 @@ public class MnistLoad {
           }
         }
         return tensor;
-      }
-
-      @Override
-      public int getLabel() {
-        return label;
       }
     };
   }

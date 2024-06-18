@@ -9,8 +9,9 @@ public interface Broadcastable extends Tensor {
     return new Tensor() {
       final int broadcastSize = Arrays.stream(shape).reduce(1, (a, b) -> a * b);
 
-      public int size() {
-        return broadcastSize;
+      @Override
+      public double[] getData() {
+        return Broadcastable.this.getData();
       }
 
       @Override
@@ -18,9 +19,8 @@ public interface Broadcastable extends Tensor {
         return shape;
       }
 
-      @Override
-      public double[] getData() {
-        return Broadcastable.this.getData();
+      public int size() {
+        return broadcastSize;
       }
     };
   }

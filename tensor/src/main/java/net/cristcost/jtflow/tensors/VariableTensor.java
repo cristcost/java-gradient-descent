@@ -21,22 +21,6 @@ public class VariableTensor implements Tensor, Differentiable {
   @Setter
   private Optimizer optimizer;
 
-  void set(double value, int... indices) {
-    int index = calculateIndex(indices);
-    if (index >= size()) {
-      throw new ArrayIndexOutOfBoundsException(
-          String.format(
-              "Requested index is beyond the size of the tensor data: result index %d >= size %d",
-              index, size()));
-    }
-    data[index % data.length] = value;
-  }
-
-  @Override
-  public String toString() {
-    return this.json();
-  }
-
   public VariableTensor(double[] data, int[] shape) {
     this.data = data;
     this.shape = shape;
@@ -56,6 +40,22 @@ public class VariableTensor implements Tensor, Differentiable {
     }
     optimizer.optimize(data, gradient);
     Arrays.fill(gradient, 0.0);
+  }
+
+  @Override
+  public String toString() {
+    return this.json();
+  }
+
+  void set(double value, int... indices) {
+    int index = calculateIndex(indices);
+    if (index >= size()) {
+      throw new ArrayIndexOutOfBoundsException(
+          String.format(
+              "Requested index is beyond the size of the tensor data: result index %d >= size %d",
+              index, size()));
+    }
+    data[index % data.length] = value;
   }
 
 }

@@ -9,6 +9,31 @@ public interface Tensor extends Projector {
 
 
 
+  default int calculateIndex(int[] indices) {
+    int indicesNdim = indices.length;
+    if (indicesNdim == 0) {
+      return 0;
+    } else if (indicesNdim == 1) {
+      return indices[0];
+    } else {
+
+      int tensorNdim = getShape().length;
+
+      if (indicesNdim > tensorNdim) {
+        throw new IllegalArgumentException("Number of indices does not match array dimension.");
+      } else {
+        int index = 0;
+        int multiplier = 1;
+        for (int i = tensorNdim - 1; i >= (tensorNdim - indicesNdim); i--) {
+          // shift the requested indices to the right by subtracting (tensorNdim - indicesNdim)
+          index += indices[i - tensorNdim + indicesNdim] * multiplier;
+          multiplier *= getShape()[i];
+        }
+        return index;
+      }
+    }
+  }
+
   default double get(int... indices) {
     int index = calculateIndex(indices);
     if (index >= size()) {
@@ -41,31 +66,6 @@ public interface Tensor extends Projector {
 
   default int size() {
     return getData().length;
-  }
-
-  default int calculateIndex(int[] indices) {
-    int indicesNdim = indices.length;
-    if (indicesNdim == 0) {
-      return 0;
-    } else if (indicesNdim == 1) {
-      return indices[0];
-    } else {
-
-      int tensorNdim = getShape().length;
-
-      if (indicesNdim > tensorNdim) {
-        throw new IllegalArgumentException("Number of indices does not match array dimension.");
-      } else {
-        int index = 0;
-        int multiplier = 1;
-        for (int i = tensorNdim - 1; i >= (tensorNdim - indicesNdim); i--) {
-          // shift the requested indices to the right by subtracting (tensorNdim - indicesNdim)
-          index += indices[i - tensorNdim + indicesNdim] * multiplier;
-          multiplier *= getShape()[i];
-        }
-        return index;
-      }
-    }
   }
 
   private void formatArray(int decimals, StringBuilder builder, int index, int size, int level) {
