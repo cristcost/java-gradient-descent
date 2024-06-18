@@ -5,6 +5,8 @@ import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import net.cristcost.jtflow.JTFlow;
 import net.cristcost.jtflow.api.Tensor;
+import net.cristcost.jtflow.api.operations.Computation;
+import net.cristcost.jtflow.api.operations.Operation;
 import net.cristcost.jtflow.operations.impl.Addition;
 import net.cristcost.jtflow.operations.impl.CategoricalCrossentropy;
 import net.cristcost.jtflow.operations.impl.Common;
@@ -18,7 +20,7 @@ import net.cristcost.jtflow.operations.impl.SoftMax;
 import net.cristcost.jtflow.tensors.ComputedTensor;
 
 @RequiredArgsConstructor
-public enum Operation {
+public enum Operations implements Operation {
 
   ADDITION(
       true,
@@ -83,7 +85,7 @@ public enum Operation {
   private final BiConsumer<double[], Tensor[]> backpropagationFunction;
 
 
-
+  @Override
   public ComputedTensor compute(Tensor... operands) {
     int[] shape = resultShapeFunction.apply(operands);
 
@@ -94,6 +96,7 @@ public enum Operation {
     return new ComputedTensor(operationResult, shape, computation);
   }
 
+  @Override
   public void backpropagate(double[] gradient, Tensor... operands) {
     backpropagationFunction.accept(gradient, operands);
   }

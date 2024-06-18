@@ -18,6 +18,10 @@
     <module>file</module>
     <module>api</module>
     <module>tensormath</module>
+
+    <module>builder</module>
+    <module>tensor</module>
+
     <module>core</module>
     <module>optimizers</module>
     <module>dataset</module>

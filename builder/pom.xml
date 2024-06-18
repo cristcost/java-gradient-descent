@@ -10,23 +10,18 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>jtflow-core</artifactId>
-  <name>JTFlow :: Core</name>
+  <artifactId>jtflow-builder</artifactId>
+  <name>JTFlow :: Builder</name>
 
   <dependencies>
     <dependency>
       <groupId>net.cristcost.jtflow</groupId>
-      <artifactId>jtflow-tensormath</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>net.cristcost.jtflow</groupId>
-      <artifactId>jtflow-builder</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>net.cristcost.jtflow</groupId>
       <artifactId>jtflow-tensor</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.cristcost.jtflow</groupId>
+      <artifactId>jtflow-file</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

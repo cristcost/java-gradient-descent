@@ -1,4 +1,4 @@
-package net.cristcost.jtflow.operations;
+package net.cristcost.jtflow.api.operations;
 
 import lombok.Getter;
 import net.cristcost.jtflow.api.Tensor;

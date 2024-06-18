@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import net.cristcost.jtflow.api.Tensor;
-import net.cristcost.jtflow.operations.Computation;
-import net.cristcost.jtflow.operations.Operation;
+import net.cristcost.jtflow.api.operations.Computation;
+import net.cristcost.jtflow.api.operations.Operation;
 import net.cristcost.jtflow.tensors.ComputedTensor;
 
 public class ComputationGraphStats {

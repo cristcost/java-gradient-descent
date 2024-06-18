@@ -4,7 +4,7 @@ import java.util.Arrays;
 import net.cristcost.jtflow.api.Broadcastable;
 import net.cristcost.jtflow.api.Tensor;
 import net.cristcost.jtflow.builder.TensorBuilder;
-import net.cristcost.jtflow.operations.Operation;
+import net.cristcost.jtflow.operations.Operations;
 import net.cristcost.jtflow.tensors.ComputedTensor;
 import net.cristcost.jtflow.tensors.ConstantTensor;
 
@@ -15,41 +15,41 @@ public class JTFlow {
 
   // Basic operations
   public static ComputedTensor sum(Tensor... operands) {
-    return Operation.ADDITION.compute(operands);
+    return Operations.ADDITION.compute(operands);
   }
 
   public static ComputedTensor multiply(Tensor... operands) {
-    return Operation.MULTIPLICATION.compute(operands);
+    return Operations.MULTIPLICATION.compute(operands);
 
   }
 
   public static ComputedTensor pow(Tensor base, Tensor exponent) {
-    return Operation.ESPONENTIATION.compute(base, exponent);
+    return Operations.ESPONENTIATION.compute(base, exponent);
   }
 
   public static ComputedTensor relu(Tensor operand) {
-    return Operation.RELU.compute(operand);
+    return Operations.RELU.compute(operand);
   }
 
   public static ComputedTensor dot(Tensor a, Tensor b) {
-    return Operation.DOT.compute(a, b);
+    return Operations.DOT.compute(a, b);
   }
 
   public static ComputedTensor mse(Tensor a, Tensor b) {
-    return Operation.MSE.compute(a, b);
+    return Operations.MSE.compute(a, b);
   }
 
   public static ComputedTensor categoricalCrossentropy(Tensor predictions,
       Tensor oneHotEncodedLabels) {
-    return Operation.CATEGORICAL_CROSSENTROPY.compute(predictions, oneHotEncodedLabels);
+    return Operations.CATEGORICAL_CROSSENTROPY.compute(predictions, oneHotEncodedLabels);
   }
 
   public static ComputedTensor softmax(Tensor operand) {
-    return Operation.SOFTMAX.compute(operand);
+    return Operations.SOFTMAX.compute(operand);
   }
 
   public static ComputedTensor matmul(Tensor input, Tensor other) {
-    return Operation.MATMUL.compute(input, other);
+    return Operations.MATMUL.compute(input, other);
   }
 
   // Don't like it here, should really be in the tensor only
