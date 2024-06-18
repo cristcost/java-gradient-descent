@@ -8,7 +8,19 @@ I'm considering writing an article on Medium.com or some other platform like [mo
 ## "Tensor" Branch
 While the main branch focuses on SGD with scalar values, I'm exploring how to change the code to support N Dimensional arrays in the [this](https://github.com/cristcost/java-gradient-descent/tree/tensor) branch.
 
-**Current status**: implemented support for Tensor operations and implemented MNIST dataset (handwritten digits) training loop in pure Java.
+### Current status:
+* implemented support for Tensor operations and implemented MNIST dataset (handwritten digits) training loop in pure Java.
+* ongoing refactoring and re-modularization of the code.
+
+**Current Levelized Build **:
+* Level 1: api, math, file 
+* Level 2: dataset, optimizers, tensor, tensormath
+* Level 3: builder
+* Level 4: core
+* Level 5: debug
+* Level 6: examples
+* Orphan: extras
+
 
 *Note:* Model learning perform and learn at equivalent rate than the following PyTorch code. Interestingly, a key factor that boosted learning performance was to use a Kaiming Uniform Initialization for the model parameters (until that, this Java model was converging 10 time slower than PyTorch one).
 

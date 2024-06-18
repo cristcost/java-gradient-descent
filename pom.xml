@@ -14,18 +14,31 @@
 
 
   <modules>
+    <!-- Level 1 -->
     <module>math</module>
     <module>file</module>
     <module>api</module>
-    <module>tensormath</module>
-    <module>builder</module>
-    <module>tensor</module>
-    <module>core</module>
+
+    <!-- Level 2 -->
     <module>optimizers</module>
     <module>dataset</module>
+    <module>tensor</module>
+    <module>tensormath</module>
+
+    <!-- Level 3 -->
+    <module>builder</module>
+
+    <!-- Level 4 -->
+    <module>core</module>
+
+    <!-- Level 5 -->
     <module>debug</module>
-    <module>extras</module>
+
+    <!-- Level 6 -->
     <module>examples</module>
+
+    <!-- Currently unused -->
+    <module>extras</module>
   </modules>
 
   <organization>
