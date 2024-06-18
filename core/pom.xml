@@ -16,6 +16,11 @@
   <dependencies>
     <dependency>
       <groupId>net.cristcost.jtflow</groupId>
+      <artifactId>jtflow-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.cristcost.jtflow</groupId>
       <artifactId>jtflow-tensormath</artifactId>
       <version>${project.version}</version>
     </dependency>

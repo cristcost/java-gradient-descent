@@ -16,15 +16,37 @@
   <dependencies>
     <dependency>
       <groupId>net.cristcost.jtflow</groupId>
-      <artifactId>jtflow-core</artifactId>
+      <artifactId>jtflow-api</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>net.cristcost.jtflow</groupId>
+      <artifactId>jtflow-tensor</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    
+
+
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>${lombok.version}</version>
       <scope>provided</scope>
     </dependency>
+
+    <dependency>
+      <groupId>net.cristcost.jtflow</groupId>
+      <artifactId>jtflow-builder</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.cristcost.jtflow</groupId>
+      <artifactId>jtflow-core</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>

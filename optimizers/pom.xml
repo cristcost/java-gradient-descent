@@ -16,7 +16,7 @@
   <dependencies>
     <dependency>
       <groupId>net.cristcost.jtflow</groupId>
-      <artifactId>jtflow-core</artifactId>
+      <artifactId>jtflow-api</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

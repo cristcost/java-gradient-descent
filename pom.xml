@@ -18,10 +18,8 @@
     <module>file</module>
     <module>api</module>
     <module>tensormath</module>
-
     <module>builder</module>
     <module>tensor</module>
-
     <module>core</module>
     <module>optimizers</module>
     <module>dataset</module>
@@ -39,9 +37,77 @@
     <maven.compiler.source>20</maven.compiler.source>
     <maven.compiler.target>20</maven.compiler.target>
 
+    <compiler.plugin.version>3.13.0</compiler.plugin.version>
+    <dependency.plugin.version>3.7.0</dependency.plugin.version>
+    <clean.plugin.version>3.3.2</clean.plugin.version>
+    <jar.plugin.version>3.4.1</jar.plugin.version>
+    <source.plugin.version>3.3.1</source.plugin.version>
+    <javadoc.plugin.version>3.7.0</javadoc.plugin.version>
+
     <jackson.version>2.17.1</jackson.version>
     <junit.version>5.10.1</junit.version>
     <lombok.version>1.18.30</lombok.version>
 
   </properties>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${compiler.plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>${dependency.plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>${clean.plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>${jar.plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>${source.plugin.version}</version>
+          <executions>
+            <execution>
+              <id>attach-sources</id>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>${javadoc.plugin.version}</version>
+          <executions>
+            <execution>
+              <id>attach-javadocs</id>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <attach>true</attach>
+            <source>${java.version}</source>
+            <quiet>true</quiet>
+            <detectOfflineLinks>false</detectOfflineLinks>
+            <javadocVersion>${java.version}</javadocVersion>
+            <encoding>${project.build.sourceEncoding}</encoding>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>
