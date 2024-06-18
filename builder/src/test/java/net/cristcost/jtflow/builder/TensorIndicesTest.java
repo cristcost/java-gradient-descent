@@ -1,8 +1,8 @@
 package net.cristcost.jtflow.builder;
 
-import static net.cristcost.jtflow.JTFlow.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import net.cristcost.jtflow.builder.TensorBuilder;
 
 class TensorIndicesTest {
 
@@ -41,6 +41,14 @@ class TensorIndicesTest {
     TensorBuilder.incrementIndices(indices, shape);
     Assertions.assertArrayEquals(index(0, 0, 0), indices);
 
+  }
+
+  private int[] index(int... indices) {
+    return indices;
+  }
+
+  private int[] shape(int... shape) {
+    return shape;
   }
 
   private void repeat(int times, Runnable runnable) {
