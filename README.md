@@ -10,9 +10,8 @@ While the main branch focuses on SGD with scalar values, I'm exploring how to ch
 
 **Current status**: implemented support for Tensor operations and implemented MNIST dataset (handwritten digits) training loop in pure Java.
 
-*Note:* The code is learning, as the number of correct predictions improves over each epoch and beat the random accuracy of 10% (* running on the training dataset, did not check yet if it overfit). However the performance is inferior to the equivalent PyTorch code, which achieve 87% accuracy in less than 7 epochs. Either PyTorch has additional optimizations I've not implemented, or there is something wrong in my implementation. The CrossEntropy loss value in my code is 1 order of magnitude bigger than in pytorch and that's a clue to dive deep (could pytorch be performing some normalization?).
+*Note:* Model learning perform and learn at equivalent rate than the following PyTorch code. Interestingly, a key factor that boosted learning performance was to use a Kaiming Uniform Initialization for the model parameters (until that, this Java model was converging 10 time slower than PyTorch one).
 
-Pytorch code I'm comparing to:
 
 ```
 import torch
