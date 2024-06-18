@@ -1,7 +1,7 @@
-package net.cristcost.differentiable;
+package net.cristcost.jtflow;
 
-import static net.cristcost.differentiable.TensorAsserts.assertTensorsEquals;
 import static net.cristcost.jtflow.JTFlow.*;
+import static net.cristcost.jtflow.TensorAsserts.assertTensorsEquals;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import java.util.function.Function;
 import org.junit.jupiter.api.Test;

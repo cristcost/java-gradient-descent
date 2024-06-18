@@ -1,4 +1,4 @@
-package net.cristcost.differentiable;
+package net.cristcost.jtflow;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import net.cristcost.jtflow.api.Tensor;

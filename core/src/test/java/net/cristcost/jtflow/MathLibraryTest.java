@@ -1,4 +1,4 @@
-package net.cristcost.differentiable;
+package net.cristcost.jtflow;
 
 import static net.cristcost.jtflow.JTFlow.*;
 import java.util.function.Function;

@@ -1,4 +1,4 @@
-package net.cristcost.differentiable;
+package net.cristcost.jtflow;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
