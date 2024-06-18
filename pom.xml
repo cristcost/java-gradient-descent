@@ -14,8 +14,9 @@
 
 
   <modules>
-    <module>api</module>
     <module>math</module>
+    <module>file</module>
+    <module>api</module>
     <module>tensormath</module>
     <module>core</module>
     <module>optimizers</module>
@@ -39,8 +40,4 @@
     <lombok.version>1.18.30</lombok.version>
 
   </properties>
-
-
 </project>
-
-

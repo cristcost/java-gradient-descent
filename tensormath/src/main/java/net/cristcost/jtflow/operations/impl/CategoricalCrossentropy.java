@@ -7,13 +7,6 @@ import net.cristcost.jtflow.operations.raw.RawCategoricalCrossentropy;
 public class CategoricalCrossentropy {
 
 
-  public static double[] compute(Tensor prediction, Tensor oneHotEncodedLabels) {
-    validateTensorCompatibility(prediction, oneHotEncodedLabels);
-
-    return Common.makeData(RawCategoricalCrossentropy.compute(prediction.getData(), oneHotEncodedLabels.getData()));
-  }
-
-
   public static void chain(double[] outerFunctionGradient, Tensor prediction,
       Tensor oneHotEncodedLabels) {
 
@@ -29,6 +22,14 @@ public class CategoricalCrossentropy {
       // and eventually change the code in the future
       throw new RuntimeException("CategoricalCrossentropy Labels are not expected to be Variable.");
     }
+  }
+
+
+  public static double[] compute(Tensor prediction, Tensor oneHotEncodedLabels) {
+    validateTensorCompatibility(prediction, oneHotEncodedLabels);
+
+    return Common.makeData(
+        RawCategoricalCrossentropy.compute(prediction.getData(), oneHotEncodedLabels.getData()));
   }
 
   public static int[] shape(Tensor tensor, Tensor other) {

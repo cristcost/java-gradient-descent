@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import net.cristcost.jtflow.api.Tensor;
+import net.cristcost.jtflow.builder.TensorLoader;
 import net.cristcost.jtflow.dataset.Sample;
 import net.cristcost.jtflow.optimizer.SgdWithMomentumOptimizer;
 import net.cristcost.jtflow.tensors.ComputedTensor;
@@ -43,24 +44,24 @@ public class Mnist {
 
     final VariableTensor layer1Weights =
         load ? matrix(28 * 28, 128).variable()
-            .clone(Tensor.fromFile(Path.of("save/layer1Weights.tensor")))
+            .clone(TensorLoader.fromFile(Path.of("save/layer1Weights.tensor")))
             : matrix(28 * 28, 128).variable().kaimingUniform();
     final VariableTensor layer1Bias =
-        load ? vector(128).variable().clone(Tensor.fromFile(Path.of("save/layer1Bias.tensor")))
+        load ? vector(128).variable().clone(TensorLoader.fromFile(Path.of("save/layer1Bias.tensor")))
             : vector(128).variable().zeros();
     final VariableTensor layer2Weights =
         load ? matrix(128, 64).variable()
-            .clone(Tensor.fromFile(Path.of("save/layer2Weights.tensor")))
+            .clone(TensorLoader.fromFile(Path.of("save/layer2Weights.tensor")))
             : matrix(128, 64).variable().kaimingUniform();
     final VariableTensor layer2Bias =
-        load ? vector(64).variable().clone(Tensor.fromFile(Path.of("save/layer2Bias.tensor")))
+        load ? vector(64).variable().clone(TensorLoader.fromFile(Path.of("save/layer2Bias.tensor")))
             : vector(64).variable().zeros();
     final VariableTensor layer3Weights =
         load ? matrix(64, 10).variable()
-            .clone(Tensor.fromFile(Path.of("save/layer3Weights.tensor")))
+            .clone(TensorLoader.fromFile(Path.of("save/layer3Weights.tensor")))
             : matrix(64, 10).variable().kaimingUniform();
     final VariableTensor layer3Bias =
-        load ? vector(10).variable().clone(Tensor.fromFile(Path.of("save/layer3Bias.tensor")))
+        load ? vector(10).variable().clone(TensorLoader.fromFile(Path.of("save/layer3Bias.tensor")))
             : vector(10).variable().zeros();
 
     layer1Weights.setOptimizer(new SgdWithMomentumOptimizer(0.01, 0.9));
@@ -172,12 +173,12 @@ public class Mnist {
             "      Samples predicted: " + epochSamples,
             "    Correct predictions: " + epochCorrect));
 
-        layer1Weights.toFile(Path.of("save/layer1Weights.tensor"));
-        layer1Bias.toFile(Path.of("save/layer1Bias.tensor"));
-        layer2Weights.toFile(Path.of("save/layer2Weights.tensor"));
-        layer2Bias.toFile(Path.of("save/layer2Bias.tensor"));
-        layer3Weights.toFile(Path.of("save/layer3Weights.tensor"));
-        layer3Bias.toFile(Path.of("save/layer3Bias.tensor"));
+        TensorLoader.toFile(layer1Weights, Path.of("save/layer1Weights.tensor"));
+        TensorLoader.toFile(layer1Bias, Path.of("save/layer1Bias.tensor"));
+        TensorLoader.toFile(layer2Weights, Path.of("save/layer2Weights.tensor"));
+        TensorLoader.toFile(layer2Bias, Path.of("save/layer2Bias.tensor"));
+        TensorLoader.toFile(layer3Weights, Path.of("save/layer3Weights.tensor"));
+        TensorLoader.toFile(layer3Bias, Path.of("save/layer3Bias.tensor"));
         minLoss = epochLoss;
       }
       System.out.println("         Epoch Loss value: " + epochLoss);

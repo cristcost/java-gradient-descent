@@ -10,20 +10,10 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>jtflow-core</artifactId>
-  <name>JTFlow :: Core</name>
+  <artifactId>jtflow-file</artifactId>
+  <name>JTFlow :: File System operations</name>
 
   <dependencies>
-    <dependency>
-      <groupId>net.cristcost.jtflow</groupId>
-      <artifactId>jtflow-tensormath</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>net.cristcost.jtflow</groupId>
-      <artifactId>jtflow-file</artifactId>
-      <version>${project.version}</version>
-    </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>

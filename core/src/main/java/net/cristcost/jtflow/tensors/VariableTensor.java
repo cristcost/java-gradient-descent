@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.cristcost.jtflow.api.Differentiable;
 import net.cristcost.jtflow.api.Optimizer;
+import net.cristcost.jtflow.api.ShapeUtils;
 import net.cristcost.jtflow.api.Tensor;
 
 public class VariableTensor implements Tensor, Differentiable {
@@ -22,7 +23,7 @@ public class VariableTensor implements Tensor, Differentiable {
   private Optimizer optimizer;
 
   void set(double value, int... indices) {
-    int index = Tensor.calculateIndex(shape, indices);
+    int index = calculateIndex(indices);
     if (index >= size()) {
       throw new ArrayIndexOutOfBoundsException(
           String.format(

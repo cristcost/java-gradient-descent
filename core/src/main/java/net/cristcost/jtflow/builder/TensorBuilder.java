@@ -1,4 +1,4 @@
-package net.cristcost.jtflow;
+package net.cristcost.jtflow.builder;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;
@@ -6,6 +6,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.random.RandomGenerator;
 import net.cristcost.jtflow.api.Optimizer;
+import net.cristcost.jtflow.api.ShapeUtils;
 import net.cristcost.jtflow.api.Tensor;
 import net.cristcost.jtflow.tensors.ConstantTensor;
 import net.cristcost.jtflow.tensors.VariableTensor;
@@ -13,8 +14,23 @@ import net.cristcost.jtflow.tensors.VariableTensor;
 
 public class TensorBuilder<T extends Tensor> {
 
+  
+  
   public static TensorBuilder<ConstantTensor> builder(int[] shape) {
     return new TensorBuilder<>(ConstantTensor.class, shape, (d, s) -> new ConstantTensor(d, s));
+  }
+
+  static void incrementIndices(int[] indices, int[] shape) {
+    int cursor = indices.length - 1;
+    indices[cursor]++;
+    while (cursor >= 0 && indices[cursor] >= shape[cursor]) {
+      indices[cursor] = 0;
+      cursor--;
+      if (cursor < 0) {
+        break;
+      }
+      indices[cursor]++;
+    }
   }
 
   private static int shapeSize(int[] s) {
@@ -23,13 +39,13 @@ public class TensorBuilder<T extends Tensor> {
 
   private final BiFunction<double[], int[], T> buildFunction;
 
-  private Optimizer optimizer;
-
   private final int[] shape;
 
   private final Class<T> tensorType;
 
   private TensorBuilder<VariableTensor> variableTensorBuilder;
+
+  private Optimizer optimizer;
 
   private TensorBuilder(Class<T> tensorType, int[] shape,
       BiFunction<double[], int[], T> buildFunction) {
@@ -49,9 +65,17 @@ public class TensorBuilder<T extends Tensor> {
     return withData(tensor.getData().clone());
   }
 
+  public T kaimingUniform() {
+    double inputFeatures = shape[0];
+    double maxval = Math.sqrt(1.0 / (inputFeatures));
+
+    return rand(() -> RandomGenerator.getDefault().nextDouble(-maxval, maxval));
+  }
+
   public T normal(double mean, double standarDeviation) {
     return rand(() -> RandomGenerator.getDefault().nextGaussian(mean, standarDeviation));
   }
+
 
   public T ones() {
     int size = shapeSize(shape);
@@ -69,7 +93,6 @@ public class TensorBuilder<T extends Tensor> {
     return withData(data);
   }
 
-
   public T repeat(double value) {
     int size = shapeSize(shape);
     double[] data = new double[size];
@@ -79,13 +102,6 @@ public class TensorBuilder<T extends Tensor> {
 
   public T uniform(double minval, double maxval) {
     return rand(() -> RandomGenerator.getDefault().nextDouble(minval, maxval));
-  }
-
-  public T kaimingUniform() {
-    double inputFeatures = shape[0];
-    double maxval = Math.sqrt(1.0 / (inputFeatures));
-
-    return rand(() -> RandomGenerator.getDefault().nextDouble(-maxval, maxval));
   }
 
   @SuppressWarnings("unchecked")
@@ -109,6 +125,7 @@ public class TensorBuilder<T extends Tensor> {
     return buildFunction.apply(data, shape);
   }
 
+
   public T withData(Function<int[], Double> dataSupplier) {
     double[] data = new double[shapeSize(shape)];
 
@@ -117,7 +134,7 @@ public class TensorBuilder<T extends Tensor> {
       data[i] = dataSupplier.apply(ii);
 
       // increment indices
-      Tensor.incrementIndices(ii, shape);
+      incrementIndices(ii, shape);
     }
 
     return buildFunction.apply(data, shape);
