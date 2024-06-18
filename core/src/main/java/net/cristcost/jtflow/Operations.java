@@ -1,9 +1,8 @@
-package net.cristcost.jtflow.operations;
+package net.cristcost.jtflow;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
-import net.cristcost.jtflow.JTFlow;
 import net.cristcost.jtflow.api.Tensor;
 import net.cristcost.jtflow.api.operations.Computation;
 import net.cristcost.jtflow.api.operations.Operation;

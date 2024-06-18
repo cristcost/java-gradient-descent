@@ -4,7 +4,6 @@ import java.util.Arrays;
 import net.cristcost.jtflow.api.Broadcastable;
 import net.cristcost.jtflow.api.Tensor;
 import net.cristcost.jtflow.builder.TensorBuilder;
-import net.cristcost.jtflow.operations.Operations;
 import net.cristcost.jtflow.tensors.ComputedTensor;
 import net.cristcost.jtflow.tensors.ConstantTensor;
 
