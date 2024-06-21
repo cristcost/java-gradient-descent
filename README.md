@@ -12,7 +12,7 @@ While the main branch focuses on SGD with scalar values, I'm exploring how to ch
 * implemented support for Tensor operations and implemented MNIST dataset (handwritten digits) training loop in pure Java.
 * ongoing refactoring and re-modularization of the code.
 
-**Current Levelized Build **:
+**Current Levelized Build**:
 * Level 1: api, math, file 
 * Level 2: dataset, optimizers, tensor, tensormath
 * Level 3: builder
