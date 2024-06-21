@@ -2,10 +2,11 @@ package net.cristcost.jtflow;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import net.cristcost.jtflow.api.Computation;
+import net.cristcost.jtflow.api.Operation;
 import net.cristcost.jtflow.api.Tensor;
-import net.cristcost.jtflow.api.operations.Computation;
-import net.cristcost.jtflow.api.operations.Operation;
 import net.cristcost.jtflow.operations.impl.Addition;
 import net.cristcost.jtflow.operations.impl.CategoricalCrossentropy;
 import net.cristcost.jtflow.operations.impl.Common;
@@ -75,6 +76,20 @@ public enum Operations implements Operation {
       operands -> MatMul.shape(operands[0], operands[1]),
       (grad, operands) -> MatMul.chain(grad, operands[0], operands[1]));
 
+
+  public static class BasicComputation implements Computation {
+    @Getter
+    private final Operation operation;
+
+    @Getter
+    private final Tensor[] operands;
+
+    public BasicComputation(Operation operation, Tensor... operands) {
+      this.operation = operation;
+      this.operands = operands;
+    }
+  }
+
   private static void backPropagationNotImplemented(double[] gradient, Tensor... operands) {
     throw new UnsupportedOperationException("Not yet implemented");
   }
@@ -108,7 +123,7 @@ public enum Operations implements Operation {
     double[] operationResult = operationFunction
         .apply(broadcastSupported ? JTFlow.broadCast(shape, operands) : operands);
 
-    Computation computation = new Computation(this, operands);
+    Computation computation = new BasicComputation(this, operands);
     return new ComputedTensor(operationResult, shape, computation);
   }
 

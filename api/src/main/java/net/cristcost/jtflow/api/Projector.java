@@ -3,6 +3,18 @@ package net.cristcost.jtflow.api;
 import java.util.Optional;
 import java.util.function.Function;
 
+
+/**
+ * Note: experimental API to ease casting syntax;
+ * 
+ * - I like how it allow to write the code to apply the logic if the class implement the specific
+ * type
+ * 
+ * - I don't like it creates a circular dependencies (Projector uses -> Broadcastable implements ->
+ * Tensor implements -> Projector)
+ * 
+ * Maybe I'll remove this in the future
+ */
 public interface Projector {
 
   default <T> Optional<T> broadcastable(Function<Broadcastable, T> function) {

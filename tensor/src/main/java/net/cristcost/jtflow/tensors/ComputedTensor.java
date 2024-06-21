@@ -4,8 +4,8 @@ import java.util.Arrays;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.cristcost.jtflow.api.Chainable;
+import net.cristcost.jtflow.api.Computation;
 import net.cristcost.jtflow.api.Tensor;
-import net.cristcost.jtflow.api.operations.Computation;
 
 @RequiredArgsConstructor
 public class ComputedTensor implements Tensor, Chainable {

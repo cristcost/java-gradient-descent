@@ -1,6 +1,4 @@
-package net.cristcost.jtflow.api.operations;
-
-import net.cristcost.jtflow.api.Tensor;
+package net.cristcost.jtflow.api;
 
 public interface Operation {
 
