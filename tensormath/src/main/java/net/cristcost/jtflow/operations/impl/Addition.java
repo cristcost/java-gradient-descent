@@ -1,15 +1,12 @@
 package net.cristcost.jtflow.operations.impl;
 
-import net.cristcost.jtflow.api.Chainable;
 import net.cristcost.jtflow.api.Tensor;
 
 public class Addition {
 
   public static void chain(double[] outerFunctionGradient, Tensor... operands) {
     for (Tensor operand : operands) {
-      if (operand instanceof Chainable) {
-        ((Chainable) operand).backpropagate(outerFunctionGradient);
-      }
+      operand.ifChainable(c -> c.backpropagate(outerFunctionGradient));
     }
   }
 

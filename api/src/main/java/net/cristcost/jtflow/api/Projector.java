@@ -1,6 +1,7 @@
 package net.cristcost.jtflow.api;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 
@@ -17,7 +18,13 @@ import java.util.function.Function;
  */
 public interface Projector {
 
-  default <T> Optional<T> broadcastable(Function<Broadcastable, T> function) {
+  default void ifBroadcastable(Consumer<Broadcastable> function) {
+    if (this instanceof Broadcastable) {
+      function.accept((Broadcastable) this);
+    }
+  }
+
+  default <T> Optional<T> mapBroadcastable(Function<Broadcastable, T> function) {
     if (this instanceof Broadcastable) {
       Broadcastable broadcastable = (Broadcastable) this;
       return Optional.of(function.apply(broadcastable));
@@ -26,7 +33,13 @@ public interface Projector {
     }
   }
 
-  default <T> Optional<T> chainable(Function<Chainable, T> function) {
+  default void ifChainable(Consumer<Chainable> function) {
+    if (this instanceof Chainable) {
+      function.accept((Chainable) this);
+    }
+  }
+
+  default <T> Optional<T> mapChainable(Function<Chainable, T> function) {
     if (this instanceof Chainable) {
       Chainable broadcastable = (Chainable) this;
       return Optional.of(function.apply(broadcastable));
@@ -35,7 +48,13 @@ public interface Projector {
     }
   }
 
-  default <T> Optional<T> differentiable(Function<Differentiable, T> function) {
+  default void ifDifferentiable(Consumer<Differentiable> function) {
+    if (this instanceof Differentiable) {
+      function.accept((Differentiable) this);
+    }
+  }
+
+  default <T> Optional<T> mapDifferentiable(Function<Differentiable, T> function) {
     if (this instanceof Differentiable) {
       Differentiable broadcastable = (Differentiable) this;
       return Optional.of(function.apply(broadcastable));
@@ -43,5 +62,4 @@ public interface Projector {
       return Optional.empty();
     }
   }
-
 }

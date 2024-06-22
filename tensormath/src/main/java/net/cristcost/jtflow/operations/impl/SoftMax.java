@@ -1,6 +1,5 @@
 package net.cristcost.jtflow.operations.impl;
 
-import net.cristcost.jtflow.api.Chainable;
 import net.cristcost.jtflow.api.Tensor;
 import net.cristcost.jtflow.operations.raw.RawSoftMax;
 
@@ -10,10 +9,8 @@ public class SoftMax {
 
     validateVectorCompatibility(tensor);
 
-    if (tensor instanceof Chainable) {
-      ((Chainable) tensor)
-          .backpropagate(RawSoftMax.gradient(outerFunctionGradient, tensor.getData()));
-    }
+    tensor.ifChainable(c -> c
+        .backpropagate(RawSoftMax.gradient(outerFunctionGradient, tensor.getData())));
   }
 
   public static double[] compute(Tensor a) {

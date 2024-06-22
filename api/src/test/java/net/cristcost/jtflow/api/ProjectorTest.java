@@ -39,9 +39,9 @@ class ProjectorTest {
 
     Tensor differentiableProjector = new DifferentiableProjector();
 
-    assertTrue(differentiableProjector.differentiable(d -> d.getGradient()).isPresent());
-    assertTrue(differentiableProjector.chainable(ProjectorTest::dummyChainOperation).isPresent());
-    assertFalse(differentiableProjector.broadcastable(b -> b.broadcast(1, 2, 3)).isPresent());
+    assertTrue(differentiableProjector.mapDifferentiable(d -> d.getGradient()).isPresent());
+    assertTrue(differentiableProjector.mapChainable(ProjectorTest::dummyChainOperation).isPresent());
+    assertFalse(differentiableProjector.mapBroadcastable(b -> b.broadcast(1, 2, 3)).isPresent());
   }
 
   @Test
@@ -49,9 +49,9 @@ class ProjectorTest {
 
     Tensor broadcastableProjector = new BroadcastableProjector();
 
-    assertFalse(broadcastableProjector.differentiable(d -> d.getGradient()).isPresent());
-    assertFalse(broadcastableProjector.chainable(ProjectorTest::dummyChainOperation).isPresent());
-    assertTrue(broadcastableProjector.broadcastable(b -> b.broadcast(1, 2, 3)).isPresent());
+    assertFalse(broadcastableProjector.mapDifferentiable(d -> d.getGradient()).isPresent());
+    assertFalse(broadcastableProjector.mapChainable(ProjectorTest::dummyChainOperation).isPresent());
+    assertTrue(broadcastableProjector.mapBroadcastable(b -> b.broadcast(1, 2, 3)).isPresent());
   }
 
   @Test
@@ -59,9 +59,9 @@ class ProjectorTest {
 
     Tensor chainableProjector = new ChainableProjector();
 
-    assertFalse(chainableProjector.differentiable(d -> d.getGradient()).isPresent());
-    assertTrue(chainableProjector.chainable(ProjectorTest::dummyChainOperation).isPresent());
-    assertFalse(chainableProjector.broadcastable(b -> b.broadcast(1, 2, 3)).isPresent());
+    assertFalse(chainableProjector.mapDifferentiable(d -> d.getGradient()).isPresent());
+    assertTrue(chainableProjector.mapChainable(ProjectorTest::dummyChainOperation).isPresent());
+    assertFalse(chainableProjector.mapBroadcastable(b -> b.broadcast(1, 2, 3)).isPresent());
   }
 
   private static Boolean dummyChainOperation(Chainable c) {

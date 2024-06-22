@@ -10,17 +10,15 @@ public class NegativeLogLikelihoodLoss {
   public static void chain(double[] outerFunctionGradient, Tensor prediction,
       Tensor oneHotEncodedLabels) {
 
-    if (prediction instanceof Chainable) {
-      ((Chainable) prediction).backpropagate(
-          RawNegativeLogLikelihoodLoss.gradient(outerFunctionGradient[0],
-              prediction.getData(),
-              oneHotEncodedLabels.getData()));
-    }
+    prediction.ifChainable(c -> c.backpropagate(
+        RawNegativeLogLikelihoodLoss.gradient(outerFunctionGradient[0],
+            prediction.getData(),
+            oneHotEncodedLabels.getData())));
 
     if (oneHotEncodedLabels instanceof Chainable) {
       // We could simply ignore chaining for label, but let's fail fast to allow detecting misuses
       // and eventually change the code in the future
-      throw new RuntimeException("CategoricalCrossentropy Labels are not expected to be Variable.");
+      throw new RuntimeException("NegativeLogLikelihoodLoss Labels are not expected to be Variable.");
     }
   }
 

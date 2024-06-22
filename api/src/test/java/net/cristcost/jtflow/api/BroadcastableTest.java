@@ -69,18 +69,18 @@ class BroadcastableTest {
     assertThrows(ArrayIndexOutOfBoundsException.class, () -> tensor.get(9));
 
     // broadcast to more dimensions
-    assertEquals(1.0, tensor.broadcastable(b -> b.broadcast(1, 3, 3)).get().get(0, 0, 0));
-    assertEquals(5.0, tensor.broadcastable(b -> b.broadcast(1, 1, 3, 3)).get().get(0, 0, 1, 1));
+    assertEquals(1.0, tensor.mapBroadcastable(b -> b.broadcast(1, 3, 3)).get().get(0, 0, 0));
+    assertEquals(5.0, tensor.mapBroadcastable(b -> b.broadcast(1, 1, 3, 3)).get().get(0, 0, 1, 1));
     assertEquals(8.0,
-        tensor.broadcastable(b -> b.broadcast(1, 1, 1, 3, 3)).get().get(0, 0, 0, 2, 1));
+        tensor.mapBroadcastable(b -> b.broadcast(1, 1, 1, 3, 3)).get().get(0, 0, 0, 2, 1));
 
     // broadcast to more dimensions and overflow (these fail in previous test)
-    assertEquals(1.0, tensor.broadcastable(b -> b.broadcast(2, 3, 3)).get().get(0, 9));
-    assertEquals(1.0, tensor.broadcastable(b -> b.broadcast(3, 3, 3)).get().get(0, 9 * 2));
-    assertEquals(1.0, tensor.broadcastable(b -> b.broadcast(11, 3, 3)).get().get(0, 9 * 10));
+    assertEquals(1.0, tensor.mapBroadcastable(b -> b.broadcast(2, 3, 3)).get().get(0, 9));
+    assertEquals(1.0, tensor.mapBroadcastable(b -> b.broadcast(3, 3, 3)).get().get(0, 9 * 2));
+    assertEquals(1.0, tensor.mapBroadcastable(b -> b.broadcast(11, 3, 3)).get().get(0, 9 * 10));
 
-    assertEquals(1.0, tensor.broadcastable(b -> b.broadcast(2, 3, 3)).get().get(3, 0));
-    assertEquals(1.0, tensor.broadcastable(b -> b.broadcast(11, 3, 3)).get().get(3 * 10, 0));
+    assertEquals(1.0, tensor.mapBroadcastable(b -> b.broadcast(2, 3, 3)).get().get(3, 0));
+    assertEquals(1.0, tensor.mapBroadcastable(b -> b.broadcast(11, 3, 3)).get().get(3 * 10, 0));
   }
 
 }

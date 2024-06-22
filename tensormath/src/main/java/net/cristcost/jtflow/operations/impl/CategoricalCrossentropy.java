@@ -10,12 +10,10 @@ public class CategoricalCrossentropy {
   public static void chain(double[] outerFunctionGradient, Tensor prediction,
       Tensor oneHotEncodedLabels) {
 
-    if (prediction instanceof Chainable) {
-      ((Chainable) prediction)
-          .backpropagate(RawCategoricalCrossentropy.gradient(outerFunctionGradient[0],
-              prediction.getData(),
-              oneHotEncodedLabels.getData()));
-    }
+    prediction.ifChainable(
+        c -> c.backpropagate(RawCategoricalCrossentropy.gradient(outerFunctionGradient[0],
+            prediction.getData(),
+            oneHotEncodedLabels.getData())));
 
     if (oneHotEncodedLabels instanceof Chainable) {
       // We could simply ignore chaining for label, but let's fail fast to allow detecting misuses

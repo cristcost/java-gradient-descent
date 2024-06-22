@@ -1,27 +1,19 @@
 package net.cristcost.jtflow.operations.impl;
 
-import net.cristcost.jtflow.api.Chainable;
 import net.cristcost.jtflow.api.Tensor;
 import net.cristcost.jtflow.operations.raw.RawMeanSquareError;
 
 public class MeanSquareError {
   public static void chain(double[] outerFunctionGradient, Tensor a, Tensor b) {
 
-    if (a instanceof Chainable) {
-      ((Chainable) a)
-          .backpropagate(RawMeanSquareError.gradient(outerFunctionGradient[0], a.getData(),
-              b.getData()));
-    }
+    a.ifChainable(c -> c
+        .backpropagate(RawMeanSquareError.gradient(outerFunctionGradient[0], a.getData(),
+            b.getData())));
 
-    if (b instanceof Chainable) {
-      ((Chainable) b)
-          .backpropagate(
-              RawMeanSquareError.gradient(outerFunctionGradient[0], b.getData(),
-                  a.getData()));
-    }
+    b.ifChainable(c -> c.backpropagate(
+        RawMeanSquareError.gradient(outerFunctionGradient[0], b.getData(),
+            a.getData())));
   }
-
-
 
   public static double[] compute(Tensor a, Tensor b) {
     validateTensorCompatibility(a, b);
