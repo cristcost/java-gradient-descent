@@ -11,6 +11,7 @@ While the main branch focuses on SGD with scalar values, I'm exploring how to ch
 ### Current status:
 * implemented support for Tensor operations and implemented MNIST dataset (handwritten digits) training loop in pure Java.
 * ongoing refactoring and re-modularization of the code.
+  * I'm attempting to split all Tensor operations to use raw array operation, ideally to allow CPU or GPU optimization in a future
 
 **Current Levelized Build**:
 * Level 1: api, math, file 
