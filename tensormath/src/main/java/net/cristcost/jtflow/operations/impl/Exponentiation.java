@@ -1,46 +1,22 @@
 package net.cristcost.jtflow.operations.impl;
 
-import net.cristcost.jtflow.api.Chainable;
 import net.cristcost.jtflow.api.Tensor;
+import net.cristcost.jtflow.operations.raw.RawExponentiation;
 
-// Not tested and not to be used in this form
-@Deprecated()
 public class Exponentiation {
 
   public static void chain(double[] outerFunctionGradient, Tensor base, Tensor exponent) {
-    if (base instanceof Chainable) {
-      double[] innerGradient = outerFunctionGradient.clone();
 
-      for (int k = 0; k < innerGradient.length; k++) {
-        // Mod over the size to broadcast implicitly
-        innerGradient[k] *= exponent.get(k % exponent.size())
-            * Math.pow(base.get(k % base.size()), exponent.get(k % exponent.size()) - 1);
-      }
-      ((Chainable) base).backpropagate(innerGradient);
-    }
+    base.ifChainable(c -> c.backpropagate(
+        RawExponentiation.baseGradient(outerFunctionGradient, base.getData(), exponent.getData())));
 
-    if (exponent instanceof Chainable) {
-      double[] innerGradient = outerFunctionGradient.clone();
-
-      for (int k = 0; k < innerGradient.length; k++) {
-        // Mod over the size to broadcast implicitly
-        innerGradient[k] *= Math.log(base.get(k % base.size()))
-            * Math.pow(base.get(k % base.size()), exponent.get(k % exponent.size()));
-      }
-      ((Chainable) exponent).backpropagate(innerGradient);
-    }
+    exponent.ifChainable(c -> c.backpropagate(
+        RawExponentiation.exponentGradient(outerFunctionGradient, base.getData(),
+            exponent.getData())));
   }
 
   public static double[] compute(Tensor base, Tensor exponent) {
-    if (base.size() != exponent.size()) {
-      throw new IllegalArgumentException("Shapes do not match.");
-    }
-
-    double[] data = new double[base.size()];
-    for (int i = 0; i < data.length; i++) {
-      data[i] = Math.pow(base.get(i), exponent.get(i));
-    }
-    return data;
+    return RawExponentiation.compute(base.getData(), exponent.getData());
   }
 
 }
