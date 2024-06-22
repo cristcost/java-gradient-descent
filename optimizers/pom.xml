@@ -32,6 +32,19 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>${assertj.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <!-- reusing mathlib functions in test -->
+      <groupId>net.cristcost.jtflow</groupId>
+      <artifactId>jtflow-math</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <!-- some low level functionality outputs JSON strings; using Jackson to perform tests and validate these JSON outputs -->
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
