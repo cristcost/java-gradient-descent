@@ -26,7 +26,7 @@ class RawExponentiationTest {
 
 
     assertThrows(RuntimeException.class, () -> {
-      RawExponentiation.compute(data(1.0), data(1.0, 2.0));
+      RawExponentiation.compute(data(1.0, 2.0), data(1.0, 2.0, 3.0));
     });
   }
 
@@ -71,8 +71,5 @@ class RawExponentiationTest {
         RawExponentiation.exponentGradient(data(1.0, 1.0, 1.0), data(2.0, 2.0, 2.0),
             data(1.0, 2.0, 3.0)),
         DELTA);
-
-
-
   }
 }

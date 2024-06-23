@@ -2,13 +2,13 @@ package net.cristcost.jtflow.operations.raw;
 
 public class RawExponentiation {
   public static double[] compute(double[] base, double[] exponent) {
-    if (base.length % exponent.length != 0) {
+    if (base.length % exponent.length != 0 && exponent.length % base.length != 0) {
       throw new IllegalArgumentException("Shapes do not match nor are broadcastable");
     }
 
-    double[] data = new double[base.length];
+    double[] data = new double[Math.max(base.length, exponent.length)];
     for (int i = 0; i < data.length; i++) {
-      data[i] = Math.pow(base[i], exponent[i % exponent.length]);
+      data[i] = Math.pow(base[i % base.length], exponent[i % exponent.length]);
     }
     return data;
   }
