@@ -50,7 +50,7 @@ public enum Operations implements Operation {
       false,
       operands -> DotProduct.compute(operands[0], operands[1]),
       operands -> DotProduct.shape(operands[0], operands[1]),
-      (grad, operands) -> DotProduct.chain(grad, operands[0], operands[1])),
+      (grad, operands) -> DotProduct.chain(grad[0], operands[0], operands[1])),
 
   MSE(
       false,
